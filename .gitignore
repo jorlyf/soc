@@ -1,0 +1,9 @@
+.vscode
+env
+node_modules
+build
+.DS_*
+*.log
+logs
+**/*.backup.*
+**/*.back.*
