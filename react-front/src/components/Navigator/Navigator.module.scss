@@ -1,6 +1,5 @@
 .nav {
-  margin-top: 0.5%;
-  margin-left: 2%;
+  margin: 0.5% 2%;
   width: 250px;
   height: max-content;
   border: 1px solid rgba(0, 0, 0, 0.05);
@@ -9,6 +8,7 @@
 
   p {
     margin-left: 25px;
+    margin-right: 25px;
     border-bottom: 2px solid rgba(0, 0, 0, 0.02);
     width: max-content;
     line-height: 18px;

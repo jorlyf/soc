@@ -1,0 +1,36 @@
+.isOnline {
+  position: absolute;
+  display: block;
+  width: max-content;
+  margin: 10px 120px;
+  font-size: 24px;
+}
+.main {
+  display: flex;
+  margin: 40px;
+}
+.mainProfile {
+  width: max-content;
+  height: max-content;
+  border-radius: 5px;
+  img {
+    border: 2px solid rgba(0, 0, 0, 0.025);
+    border-radius: 15px;
+    overflow: hidden;
+  }
+  div {
+    margin: 0;
+    font-size: 18px;
+    p {
+      margin: 0 auto;
+      width: max-content;
+    }
+  }
+}
+.info {
+  margin-top: 25px;
+  margin-left: 50px;
+  p {
+    margin: 0;
+  }
+}

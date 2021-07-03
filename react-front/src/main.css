@@ -9,3 +9,22 @@ html, body, #root {
   display: flex;
   flex-direction: column;
 }
+a {
+  text-decoration: none;
+  color: inherit;
+}
+.content {
+  margin: 0.5% auto;
+  margin-left: 0.5%;
+  margin-right: 2%;
+  width: 60%;
+  min-width: 600px;
+  height: 98%;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  border-left: 2px solid rgba(0, 0, 0, 0.05);
+  border-right: 2px solid rgba(0, 0, 0, 0.05);
+}
+.d-flex {
+  display: flex;
+}

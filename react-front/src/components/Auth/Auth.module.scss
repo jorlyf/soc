@@ -1,0 +1,43 @@
+.main {
+  margin: 2% auto;
+  width: 80vw;
+  height: max-content;
+  form {
+    h2 {
+      margin: 0 auto;
+      width: max-content;
+    }
+  }
+}
+button {
+  display: block;
+  margin: 10px auto;
+  width: max-content;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  background-color: rgba(255, 255, 255, 0.8);
+  font-family: inherit;
+  font-size: 22px;
+}
+input {
+  display: block;
+  margin: 8px auto;
+  width: 200px;
+  height: 30px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  text-align: center;
+  font-family: inherit;
+  font-size: 18px;
+}
+.btnChangeHref {
+  font-size: 16px;
+}
+.question {
+  margin-top: 80px;
+  p {
+    width: max-content;
+    margin: 0 auto;
+    font-size: 20px;
+  }
+}

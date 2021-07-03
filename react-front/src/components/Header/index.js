@@ -1,16 +1,22 @@
 import styles from './Header.module.scss';
+import { Link } from 'react-router-dom';
 
 function Header() {
-    return(
+    return (
         <header>
             <div className={styles.logo}>
-                <img src={process.env.PUBLIC_URL + '/logo.svg'} alt='Лого'/>
-                <span>парашыч</span>
+                <Link to='/'>
+                    <img src={process.env.PUBLIC_URL + '/icon.jpg'} alt='' />
+                    <span>парашыч</span>
+                </Link>
             </div>
             <div className={styles.auth}>
-                <span>
-                    уйти c параши
-                </span>
+                <Link to='/login'>
+                    зайти в парашу
+                </Link>
+                <Link to='logout'>
+                    уйти с параши
+                </Link>
             </div>
         </header>
     )
