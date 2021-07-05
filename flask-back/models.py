@@ -1,4 +1,3 @@
-from enum import unique
 from dataBase import db
 
 class Users(db.Model):

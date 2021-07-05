@@ -16,21 +16,23 @@ function Register() {
     setQuestionInput(e.target.value);
   }
   const prepareData = () => {
-    return { 'login': loginInput, 'password': passwordInput, 'question': questionInput };
+    return { 'login': loginInput, 'password': passwordInput };
   }
   const checkQuestionAnswer = () => {
-    if (questionInput != questionAnswer) {
+    if (questionInput.toLocaleLowerCase() !== questionAnswer.toLocaleLowerCase()) {
       return false;
     } else { return true; }
   }
-  const handleSubmit = () => {
-    if (!questionAnswer) {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (questionInput === '') {
       alert('ты сначала реши вопрос епта')
-    } else if (!checkQuestionAnswer) {
+    } else if (!checkQuestionAnswer()) {
       alert('непрально решил')
     } else {
       const data = prepareData();
-      axios.post('/register', { 'data': data });
+      const res = await axios.post('/register', { 'data': data });
+      console.log(res.data);
     }
   };
   const [loginInput, setLoginInput] = React.useState('');

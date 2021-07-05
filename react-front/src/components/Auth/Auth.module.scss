@@ -17,6 +17,10 @@ button {
   background-color: rgba(255, 255, 255, 0.8);
   font-family: inherit;
   font-size: 22px;
+  transition: 0.15s ease-in-out;
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.025);
+  }
 }
 input {
   display: block;

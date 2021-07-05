@@ -15,7 +15,8 @@ function Login() {
   const prepareData = () => {
     return { 'login': login, 'password': password }
   }
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     const data = prepareData();
     axios.post('/login', { 'data': data })
   }
