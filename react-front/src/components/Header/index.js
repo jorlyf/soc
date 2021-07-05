@@ -1,5 +1,6 @@
 import styles from './Header.module.scss';
 import { Link } from 'react-router-dom';
+import Logout from '../Auth/Logout';
 
 function Header() {
     return (
@@ -14,9 +15,9 @@ function Header() {
                 <Link to='/login'>
                     зайти в парашу
                 </Link>
-                <Link to='logout'>
+                <button onClick={Logout}>
                     уйти с параши
-                </Link>
+                </button>
             </div>
         </header>
     )

@@ -1,5 +1,5 @@
 .vscode
-env
+venv
 __pycache__
 node_modules
 build
@@ -8,3 +8,4 @@ build
 logs
 **/*.backup.*
 **/*.back.*
+*.db

@@ -2,9 +2,11 @@ import React from 'react';
 import axios from 'axios';
 
 import styles from './Auth.module.scss';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 function Register() {
+
+  const history = useHistory();
 
   const onChangeLoginInput = (e) => {
     setLoginInput(e.target.value);
@@ -31,8 +33,13 @@ function Register() {
       alert('непрально решил')
     } else {
       const data = prepareData();
-      const res = await axios.post('/register', { 'data': data });
-      console.log(res.data);
+      const res = await axios.post('/auth/register', { 'data': data });
+      if (res.data.status === 'ok') {
+        history.push('/login');
+      }
+      else {
+        alert('чет не так')
+      }
     }
   };
   const [loginInput, setLoginInput] = React.useState('');

@@ -1,10 +1,14 @@
 import React from 'react';
 import axios from 'axios';
+import Cookie from '../../cookie';
 
 import styles from './Auth.module.scss';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 function Login() {
+
+  const cookie = new Cookie();
+  const history = useHistory();
 
   const onChangeLogin = (e) => {
     setLogin(e.target.value);
@@ -15,10 +19,17 @@ function Login() {
   const prepareData = () => {
     return { 'login': login, 'password': password }
   }
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const data = prepareData();
-    axios.post('/login', { 'data': data })
+    const res = await axios.post('/auth/login', { 'data': data });
+    if (res.data.status === 'ok') {
+      cookie.set({"name": "token", "value": res.data.token});
+      history.push('/')
+    } else {
+      console.log("все плоха");
+      alert('чет не вышло')
+    }
   }
   const [login, setLogin] = React.useState('');
   const [password, setPassword] = React.useState('');

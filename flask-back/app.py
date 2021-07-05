@@ -22,7 +22,7 @@ class App:
     self.app = Flask(__name__)
     CORS(self.app)
     self.app.config.from_object(f'settings.configApp.{self.config}')
-    #db.init_app(self.app)
+    db.init_app(self.app)
 
   def getApp(self):
     return self.app

@@ -30,11 +30,21 @@ header {
   min-width: max-content;
   margin-right: 50px;
   margin-left: auto;
+  display: flex;
   a {
     margin: 0 15px;
     font-size: 18px;
     font-family: inherit;
     text-decoration: none;
     color: rgb(0, 0, 0);
+  }
+  button {
+    margin: 0 15px;
+    font-size: 18px;
+    font-family: inherit;
+    color: rgb(0, 0, 0);
+    border: 0;
+    background-color: white;
+    cursor: pointer;
   }
 }

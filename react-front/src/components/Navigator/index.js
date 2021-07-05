@@ -16,7 +16,7 @@ function Navigator() {
     <div className={styles.nav} >
       {
         navigationList.map(element => (
-          <Link to={element.url}> <p>{element.title}</p> </Link>
+          <Link key={element.url} to={element.url}> <p>{element.title}</p> </Link>
         ))
       }
     </div >
