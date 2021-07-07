@@ -1,7 +1,7 @@
 import jwt
 from utils.times import getTime
 
-class jwtControl:
+class JwtAuth:
     def __init__(self):
         self.__algorithm = "HS256"
         self.__secretPhrase = "b316f8daeee31360d15e7205c3b13f814bb1c23f553ab7a309ba1372f120791d49b1401c"
@@ -13,11 +13,11 @@ class jwtControl:
     def decodeToken(self, token):
         try:
             decodeToken = jwt.decode( token, self.__secretPhrase, algorithms=self.__algorithm )
-            print(decodeToken)
-            if decodeToken['ext'] > getTime():
-                return False
-            return decodeToken
+            nowTime = getTime().timestamp()
+
+            if decodeToken['exp'] < nowTime:
+                return {'status': 400, 'token': 'token is timeout'}
+            return {'status': 200, 'token': decodeToken}
         except:
-            print('ошибка')
-            return False
+            return {'status': 400, 'token': 'token is invalid'}
 

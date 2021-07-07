@@ -1,6 +1,6 @@
 from app import App
-from dbControl import dbControl
+from DbBaseClass import DbBaseClass
 
 app=App().getApp()
 
-dbControl().createAll(app)
+DbBaseClass().createAll(app)

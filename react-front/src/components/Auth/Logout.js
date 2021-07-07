@@ -1,8 +1,10 @@
-import Cookie from "../../cookie";
+import Cookie from "../../Cookie";
+import { refreshPage } from "../../scripts";
 
 function Logout() {
     const cookie = new Cookie();
-    cookie.set({"name": "token", "value": null})
+    cookie.removeAll();
+    refreshPage();
 }
 
 export default Logout;

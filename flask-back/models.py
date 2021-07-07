@@ -1,9 +1,9 @@
 from dataBase import db
 from datetime import timedelta
-from routes.jwtControl import jwtControl
+from routes.JwtAuth import JwtAuth
 from utils.times import getTime
 
-jwtController = jwtControl()
+JwtAuth = JwtAuth()
 
 class Users(db.Model):
   __tablename__ = 'users'
@@ -12,7 +12,6 @@ class Users(db.Model):
   hashPassword = db.Column(db.String(256), nullable=False)
 
   def generateToken(self):
-    dt = getTime() + timedelta(days=1)
-    print(dt)
-    token = jwtController.encodeToken({'login': self.login, 'exp': dt})
+    dt = getTime() + timedelta(days=7)
+    token = JwtAuth.encodeToken({'login': self.login, 'exp': dt})
     return token

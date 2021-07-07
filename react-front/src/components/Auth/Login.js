@@ -1,14 +1,17 @@
 import React from 'react';
 import axios from 'axios';
-import Cookie from '../../cookie';
+import Cookie from '../../Cookie';
+import UserContext from '../../UserContext';
+import { refreshPage } from '../../scripts';
 
 import styles from './Auth.module.scss';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, Redirect } from 'react-router-dom';
 
 function Login() {
 
   const cookie = new Cookie();
   const history = useHistory();
+  const { isLogged } = React.useContext(UserContext);
 
   const onChangeLogin = (e) => {
     setLogin(e.target.value);
@@ -23,11 +26,12 @@ function Login() {
     e.preventDefault();
     const data = prepareData();
     const res = await axios.post('/auth/login', { 'data': data });
-    if (res.data.status === 'ok') {
-      cookie.set({"name": "token", "value": res.data.token});
-      history.push('/')
+    if (res.data.status === 200) {
+      cookie.set({ "name": "token", "value": res.data.token });
+      cookie.set({ "name": "userId", "value": res.data.userId })
+      history.push('/');
+      refreshPage();
     } else {
-      console.log("все плоха");
       alert('чет не вышло')
     }
   }
@@ -36,6 +40,7 @@ function Login() {
 
   return (
     <div className={styles.main}>
+      {isLogged && <Redirect to='/' />}
       <Link to='register'>
         <button className={styles.btnChangeHref}>я тут впервые</button>
       </Link>

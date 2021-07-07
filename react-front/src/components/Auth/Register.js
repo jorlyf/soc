@@ -1,12 +1,14 @@
 import React from 'react';
 import axios from 'axios';
+import UserContext from '../../UserContext';
 
 import styles from './Auth.module.scss';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, Redirect } from 'react-router-dom';
 
 function Register() {
 
   const history = useHistory();
+  const isLogged = React.useContext(UserContext);
 
   const onChangeLoginInput = (e) => {
     setLoginInput(e.target.value);
@@ -46,20 +48,38 @@ function Register() {
   const [passwordInput, setPasswordInput] = React.useState('');
   const [questionInput, setQuestionInput] = React.useState('');
   const [question, setQuestion] = React.useState('');
-  const [questionAnswer, setQuestionAnswer] = React.useState('')
+  const [questions, setQuestions] = React.useState('');
+  const [questionAnswer, setQuestionAnswer] = React.useState('');
 
-  async function getQuestion() {
-    const res = await axios.get('/getQuestion');
-    setQuestionAnswer(res.data.answer);
-    setQuestion(res.data.question);
+  async function getQuestions() {
+    const res = await axios.get('/auth/getQuestions');
+    setQuestions(res.data);
+  }
+  function changeQuestion() {
+    if (questions) {
+      let qu = questions[Math.floor(Math.random() * questions.length)];
+      while (qu.question === question) {
+        qu = questions[Math.floor(Math.random() * questions.length)];
+      }
+      setQuestion(qu.question);
+      setQuestionAnswer(qu.answer);
+    }
   }
 
   React.useEffect(() => {
-    getQuestion();
+    if (!questions) {
+      console.log(questions);
+      getQuestions();
+    }
   }, []);
+
+  React.useEffect(() => {
+    changeQuestion();
+  }, [questions]);
 
   return (
     <div className={styles.main}>
+      {isLogged && <Redirect to='/' />}
       <Link to='login'>
         <button className={styles.btnChangeHref}>я тут уже давно</button>
       </Link>
@@ -72,7 +92,7 @@ function Register() {
         <button type='submit'>войти в хату</button>
       </form>
       <div className={styles.question}>
-        <button onClick={getQuestion}>дава другой вопрос</button>
+        <button onClick={changeQuestion}>дава другой вопрос</button>
         <p>реши задачу</p>
         <p>{question}</p>
         <input id='question' value={questionInput} onChange={onChangeQuestionInput}
