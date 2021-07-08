@@ -1,7 +1,10 @@
 from datetime import timedelta
 
+from sqlalchemy.orm import backref
+
 
 from dataBase import db
+from DbBaseClass import DbBaseClass
 from routes.JwtAuth import JwtAuth
 from utils.times import getTime
 
@@ -18,36 +21,32 @@ class Users(db.Model):
 
     def generateToken(self):
         dt = getTime() + timedelta(minutes=30)
-        token = JwtAuth.encodeToken({'login': self.login, 'exp': dt})
+        token = JwtAuth.encodeToken({'id': self.id, 'exp': dt})
         return token
 
-
-
-friendship = db.Table(
-    'friendships', 
-    db.Column('id', primary_key=True),
-    db.Column('a_id', db.ForeignKey('users.id')),
-    db.Column('b_id', db.ForeignKey('users.id'))
-)
 
 class Profiles(db.Model):
     __tablename__ = 'profiles'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey(
+        'users.id'))
     avatar_url = db.Column(db.String(128))
     status = db.Column(db.String(256))
-    friends = db.relationship('Users',
-        secondary=friendship,
-        primaryjoin=id==friendship.c.a_id,
-        secondaryjoin=id==friendship.c.b_id
-    )
+    friends = db.relationship(
+        'Friendships', lazy='dynamic', uselist=True)
 
-    def beFriend(self, friend):
-        if not friend in self.friends:
-            self.friends.append(friend)
-        print(self.friends)
+    def addFriend(self, friend):
+        friendship = Friendships(a_id=self.id, b_id=friend.id)
+        try:
+            db.session.add(friendship)
+            db.session.commit()
+        except:
+            pass
 
 
-    def removeFriend(self, friend):
-        if friend in self.friends:
-            self.friends.remove(friend)
+class Friendships(db.Model):
+    __tablename__ = 'friendships'
+    a_id = db.Column(db.Integer, db.ForeignKey(
+        'profiles.id'), primary_key=True)
+    b_id = db.Column(db.Integer, primary_key=True)
+

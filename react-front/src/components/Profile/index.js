@@ -1,4 +1,6 @@
 import React from 'react';
+
+import UserContext from '../../UserContext';
 import axios from 'axios';
 import styles from './Profile.module.scss';
 import { Redirect, useParams } from 'react-router-dom';
@@ -6,6 +8,7 @@ import { Redirect, useParams } from 'react-router-dom';
 function Profile() {
   const { id } = useParams();
   const [profileInfo, setProfileInfo] = React.useState({});
+  const { isLogged } = React.useContext(UserContext);
 
   React.useEffect(() => {
     async function fetch() {
@@ -13,12 +16,16 @@ function Profile() {
       console.log(res.data.status);
       if (res.data.status === 200) {
         setProfileInfo(res.data);
-      } else {
-        <Redirect to='/' />
       }
+    }
+    if (isLogged) {
       fetch();
     }
   }, []);
+
+  if (!isLogged) {
+    return (<Redirect to='/login' />)
+  }
 
   return (
     <div className='content'>

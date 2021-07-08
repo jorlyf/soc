@@ -1,0 +1,16 @@
+.friendMainBlock {
+    margin: 40px auto;
+    width: 400px;
+    div {
+        margin-bottom: 50px;
+        width: 400px;
+        height: 150px;
+        background-color: rgba(140, 100, 145, 0.025);
+        border-radius: 20px;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.02);
+    }
+}
+.notFriends {
+    margin: 100px auto;
+    width: max-content;
+}

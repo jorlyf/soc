@@ -1,9 +1,13 @@
 import axios from 'axios';
+import React from 'react';
+import UserContext from '../../UserContext';
 
 function News() {
 
+  const { token } = React.useContext(UserContext);
+
   const add = () => {
-    axios.get('/friend');
+    axios.post('/friend', {"id": 1, "token": token});
   }
 
   return (

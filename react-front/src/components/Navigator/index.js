@@ -5,7 +5,7 @@ import UserContext from '../../UserContext';
 import styles from './Navigator.module.scss';
 
 function Navigator() {
-  let { currentUserId } = React.useContext(UserContext);
+  const { currentUserId, isLogged } = React.useContext(UserContext);
 
   const navigationList = [
     { title: 'стенгазета', url: '/' },
@@ -15,6 +15,7 @@ function Navigator() {
     { title: 'приколюхи', url: '/prikol' },
     { title: 'смена погоняла', url: '/settings' }
   ];
+
   return (
     <div className={styles.nav} >
       {

@@ -1,24 +1,40 @@
 import React from 'react';
 import UserContext from '../../UserContext';
 import axios from 'axios';
+import styles from './Friends.module.scss';
+import { Redirect } from 'react-router-dom';
+
+import { loggedRequired } from '../../scripts';
 
 function Friends() {
     const [friends, setFriends] = React.useState([]);
-    const { currentUserId } = React.useContext(UserContext);
-    console.log(currentUserId);
+    const { currentUserId, isLogged } = React.useContext(UserContext);
+
     React.useEffect(() => {
         async function fetch() {
             const res = await axios.get(`/getFriends/${currentUserId}`);
-            setFriends(res.data);
-            console.log(res.data);
+            setFriends(res.data.profiles);
         }
-        fetch();
+        if (isLogged) {
+            fetch();
+        } 
     }, [])
+
+    if (!isLogged) {
+        return (<Redirect to='/login' />)
+    }
+
     return (
-        <div>
-            {friends.map((e) => {
-                <p>{e.login}</p>
-            })}
+        <div className='content'>
+            <div className={styles.friendMainBlock}>
+                {friends.length > 0 ?
+                    friends.map((e) => (
+                        <div>
+                            <p key={e.login}>{e.login}</p>
+                        </div>
+                    )) :
+                    <p className={styles.notFriends}>че петух друзей нет?</p>}
+            </div>
         </div>
     )
 }

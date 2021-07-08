@@ -1,9 +1,13 @@
+import re
 from flask import Blueprint, request
 
 from routes.DbAuth import DbAuth
+from routes.JwtAuth import JwtAuth
+from routes.jwtRequired import tokenRequired
 
 profile = Blueprint('profile', __name__)
 dbAuth = DbAuth()
+jwtAuth = JwtAuth()
 
 @profile.route('/getProfileById/<int:id>', methods=['GET'])
 def getProfileById(id):
@@ -13,24 +17,33 @@ def getProfileById(id):
     return {"status": 404}
 
 
-@profile.route('/friend', methods=['GET'])
+@profile.route('/friend', methods=['GET', 'POST'])
 def friend():
-    user1 = dbAuth.getUserByLogin('admin')
-    user2 = dbAuth.getUserByLogin('jorlyf')
-    user1.profile.beFriend(user2)
+    req = request.get_json(force=True)
+    friendId = req.get('id')
+    token = req.get('token')
 
-    return {'a': 'b'}
+    check = tokenRequired(token)
+    if check == {'status': True}:
+        userId = check['id']
+        user = dbAuth.getUserById(userId)
+        friend = dbAuth.getUserById(friendId)
+        user.profile.addFriend(friend)
+        return {'status': 200}
+    else:
+        return {'status': 404}
 
 
 @profile.route('/getFriends/<int:id>')
 def getFriends(id):
     user = dbAuth.getUserById(id)
     friends = user.profile.friends
-    print(friends)
-    #lis = {}
+    profsList = []
     for i in friends:
         print(i.id)
-        #lis['a'] = i.login
+        prf = {}
+        prf['login'] = i.user.login
+        profsList.append(prf)
     
-    #print(lis)
-    return {'ok': 1}
+    print(profsList)
+    return {"profiles": profsList}

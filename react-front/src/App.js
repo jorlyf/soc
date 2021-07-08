@@ -69,6 +69,7 @@ function App() {
               <Login />
             </Route>
             <Route path='/friends'>
+              <Navigator />
               <Friends />
             </Route>
 
