@@ -1,6 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import Cookie from '../../Cookie';
 import UserContext from '../../UserContext';
 import { refreshPage } from '../../scripts';
 
@@ -9,7 +8,6 @@ import { Link, useHistory, Redirect } from 'react-router-dom';
 
 function Login() {
 
-  const cookie = new Cookie();
   const history = useHistory();
   const { isLogged } = React.useContext(UserContext);
 
@@ -27,8 +25,8 @@ function Login() {
     const data = prepareData();
     const res = await axios.post('/auth/login', { 'data': data });
     if (res.data.status === 200) {
-      cookie.set({ "name": "token", "value": res.data.token });
-      cookie.set({ "name": "userId", "value": res.data.userId })
+      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('userId', res.data.userId)
       history.push('/');
       refreshPage();
     } else {

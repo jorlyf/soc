@@ -1,19 +1,23 @@
 import React from 'react';
 import axios from 'axios';
 import styles from './Profile.module.scss';
+import { Redirect, useParams } from 'react-router-dom';
 
-function Profile( match ) {
-  
+function Profile() {
+  const { id } = useParams();
   const [profileInfo, setProfileInfo] = React.useState({});
-  console.log(match);
 
   React.useEffect(() => {
     async function fetch() {
-      //const res = await axios.get(`/getUserById?${match.params.id}`);
-      //console.log(res.data);
-      //setProfileInfo(res.data);
+      const res = await axios.get(`/getProfileById/${id}`);
+      console.log(res.data.status);
+      if (res.data.status === 200) {
+        setProfileInfo(res.data);
+      } else {
+        <Redirect to='/' />
+      }
+      fetch();
     }
-    fetch();
   }, []);
 
   return (
@@ -21,7 +25,7 @@ function Profile( match ) {
       <span className={styles.isOnline}>{profileInfo.isOnline ? 'на зоне' : 'дрыхнет'}</span>
       <div className={styles.main}>
         <div className={styles.mainProfile}>
-          <img src='icon.jpg' width={250} height={250} alt='' />
+          <img src={window.location.origin + '/profileAvatars/icon.jpg'} width={250} height={250} alt='' />
           <div>
             <p>оставить записку</p>
           </div>

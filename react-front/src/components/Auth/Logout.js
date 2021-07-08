@@ -1,9 +1,9 @@
-import Cookie from "../../Cookie";
+
 import { refreshPage } from "../../scripts";
 
 function Logout() {
-    const cookie = new Cookie();
-    cookie.removeAll();
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
     refreshPage();
 }
 

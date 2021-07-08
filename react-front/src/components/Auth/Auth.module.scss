@@ -42,5 +42,13 @@ input {
     width: max-content;
     margin: 0 auto;
     font-size: 20px;
+    overflow-wrap: break-word;
+  }
+  span {
+    display: block;
+    width: fit-content;
+    margin: 0 auto;
+    font-size: 20px;
+    overflow-wrap: break-word;
   }
 }

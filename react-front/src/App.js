@@ -10,37 +10,39 @@ import Navigator from './components/Navigator';
 import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import Profile from './components/Profile';
+import Friends from './components/Friends';
+
 import UserContext from './UserContext';
-import Cookie from './Cookie';
 import axios from 'axios';
 import { refreshPage } from './scripts';
 
 function App() {
-  const cookie = new Cookie();
-  const tok = cookie.getToken();
-  const cui = cookie.getUserId();
+
+  const tok = localStorage.getItem('token');
+  const cui = localStorage.getItem('userId')
 
   const [token, setToken] = React.useState(tok);
   const [isLogged, setIsLogged] = React.useState(false);
   const [currentUserId, setUserId] = React.useState(cui);
 
-  React.useEffect(() => {
-    async function check() {
-      const res = await axios.post('/auth/checkMyToken', { 'data': token });
-      if (res.data.status === 200) {
-        setIsLogged(true);
-        setUserId(cookie.getUserId());
-      } else {
-        setIsLogged(false);
-        cookie.removeAll();
-        alert('токен чет умер, перезайди');
-        refreshPage();
-      }
-    };
-    if (token) {
-      check();
+  async function checkToken(token) {
+    const res = await axios.post('/auth/checkMyToken', { 'data': token });
+    if (res.data.status === 200) {
+      setIsLogged(true);
+    } else {
+      setIsLogged(false);
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      alert('токен чет умер, перезайди');
+      refreshPage();
     }
-  }, [token]);
+  };
+
+  React.useEffect(() => {
+    if (token) {
+      checkToken(token);
+    }
+  }, []);
 
 
 
@@ -65,6 +67,9 @@ function App() {
             </Route>
             <Route path='/login'>
               <Login />
+            </Route>
+            <Route path='/friends'>
+              <Friends />
             </Route>
 
           </Switch>

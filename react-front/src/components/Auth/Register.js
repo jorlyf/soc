@@ -8,7 +8,7 @@ import { Link, useHistory, Redirect } from 'react-router-dom';
 function Register() {
 
   const history = useHistory();
-  const isLogged = React.useContext(UserContext);
+  const { isLogged } = React.useContext(UserContext);
 
   const onChangeLoginInput = (e) => {
     setLoginInput(e.target.value);
@@ -36,7 +36,7 @@ function Register() {
     } else {
       const data = prepareData();
       const res = await axios.post('/auth/register', { 'data': data });
-      if (res.data.status === 'ok') {
+      if (res.data.status === 200) {
         history.push('/login');
       }
       else {
@@ -94,7 +94,7 @@ function Register() {
       <div className={styles.question}>
         <button onClick={changeQuestion}>дава другой вопрос</button>
         <p>реши задачу</p>
-        <p>{question}</p>
+        <span>{question}</span>
         <input id='question' value={questionInput} onChange={onChangeQuestionInput}
           type='text' placeholder='сюда ответ'></input>
       </div>

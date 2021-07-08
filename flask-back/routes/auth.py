@@ -2,8 +2,6 @@ from flask import Blueprint, request, jsonify
 from random import choice
 import json
 from settings.baseDir import baseDir
-from dataBase import db
-from models import Users
 from routes.JwtAuth import JwtAuth
 from routes.DbAuth import DbAuth
 
@@ -11,7 +9,7 @@ dbAuth = DbAuth()
 jwtAuth = JwtAuth()
 
 auth = Blueprint('auth', __name__)
-questionList = json.load(open(baseDir + '\settings\\regQuestions.json', encoding='utf-8')) #переделать
+questionList = json.load(open(baseDir + '\settings\\regQuestions.json', encoding='utf-8'))
 
 @auth.route('/auth/register', methods=['GET', 'POST'])
 def registerUser():
@@ -29,7 +27,7 @@ def loginUser():
     req = request.get_json(force=True)
     data = req.get('data')
     if dbAuth.checkUserLoginAndPassword(data):
-        user = db.session.query(Users).filter_by(login=data['login']).first()
+        user = dbAuth.getUserByLogin(data['login'])
         return {"status": 200, "token": user.generateToken(), "userId": user.id}
     return {"status": 400}
 
