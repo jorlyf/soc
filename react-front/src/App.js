@@ -11,6 +11,7 @@ import Login from './components/Auth/Login';
 import Register from './components/Auth/Register';
 import Profile from './components/Profile';
 import Friends from './components/Friends';
+import Notification from './components/Notification';
 
 import UserContext from './UserContext';
 import axios from 'axios';

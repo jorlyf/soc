@@ -9,6 +9,7 @@ profile = Blueprint('profile', __name__)
 dbAuth = DbAuth()
 jwtAuth = JwtAuth()
 
+
 @profile.route('/getProfileById/<int:id>', methods=['GET'])
 def getProfileById(id):
     user = dbAuth.getUserById(id)
@@ -44,6 +45,6 @@ def getFriends(id):
         prf = {}
         prf['login'] = i.user.login
         profsList.append(prf)
-    
+
     print(profsList)
     return {"profiles": profsList}
