@@ -2,7 +2,7 @@ html, body, #root {
   width: 100vw;
   height: 100vh;
   margin: 0;
-  font-family: Inder;
+  font-family: Helvetica;
   background-color: rgba(140, 100, 145, 0.025);
 }
 #root {

@@ -5,31 +5,56 @@
   margin: 10px 120px;
   font-size: 24px;
 }
+.registerDate {
+  display: block;
+  width: max-content;
+  margin: 10px 100px;
+  margin-left: auto;
+  font-size: 14px;
+}
 .main {
   display: flex;
   margin: 40px;
 }
 .mainProfile {
+  display: flex;
+  flex-direction: column;
   width: max-content;
   height: max-content;
   border-radius: 5px;
   img {
+    margin: 0 auto;
+    max-width: 350px;
+    max-height: 400px;
+    cursor: pointer;
     border: 2px solid rgba(0, 0, 0, 0.025);
     border-radius: 15px;
     overflow: hidden;
+    object-fit: contain;
   }
   div {
     margin: 0;
     font-size: 18px;
-    p {
-      margin: 0 auto;
-      width: max-content;
+    button {
+      display: block;
+      margin: 10px auto;
+      background-color: rgba(65, 105, 225, 0.15);
+      border: 2px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      width: 250px;
+      height: 30px;
+      cursor: pointer;
     }
   }
 }
 .info {
   margin-top: 25px;
-  margin-left: 50px;
+  margin-right: 200px;
+  margin-left: auto;
+  .login {
+    font-weight: bold;
+    font-size: 28px;
+  }
   p {
     margin: 0;
   }

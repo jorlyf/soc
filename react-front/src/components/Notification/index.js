@@ -1,15 +1,17 @@
+import { ExitBtn } from '../Btns';
+
 import styles from './Notification.module.scss';
 
-function Notification(props) {
+function Notification({close, msg}) {
 
 	const handleClose = () => {
-		props.close(false);
+		close(false);
 	}
 
 	return (
 		<div className={styles.notification}>
-			<span>{props.msg}</span>
-			<img src='btns/closeButton.svg' onClick={handleClose} />
+			<span>{msg}</span>
+			<ExitBtn closeFunction={handleClose}/>
 		</div>
 	)
 }

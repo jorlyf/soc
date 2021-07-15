@@ -1,0 +1,4 @@
+{
+    "python.formatting.provider": "yapf",
+    "python.pythonPath": "flask-back\\venv\\Scripts\\python.exe"
+}

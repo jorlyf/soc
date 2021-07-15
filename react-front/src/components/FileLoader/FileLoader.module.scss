@@ -1,0 +1,39 @@
+.main {
+    position        : fixed;
+    top             : 0;
+    left            : 0;
+    right           : 0;
+    bottom          : 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index         : 100;
+
+    div {
+        margin          : 10% auto;
+        top             : 10%;
+        width           : 500px;
+        height          : 125px;
+        background-color: rgb(255, 255, 255);
+        text-align      : center;
+        border-radius   : 5px;
+        border          : 2px solid rgba(0, 0, 0, 0.4);
+
+        span {
+            display: block;
+            font-size: 48px;
+            margin-top: 30px;
+        }
+
+        img {
+            height: 70%;
+            cursor: pointer;
+        }
+
+        form {
+            input {
+                display: none;
+            }
+
+            button {}
+        }
+    }
+}

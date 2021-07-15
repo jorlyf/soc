@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import UserContext from '../../UserContext';
+import { UserContext } from '../../contexts';
 
 import Logout from '../Auth/Logout';
 

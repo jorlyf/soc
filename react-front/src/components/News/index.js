@@ -1,22 +1,13 @@
 import React from 'react';
-import UserContext from '../../UserContext';
-import Notification from '../Notification';
+
+import styles from './News.module.scss';
 
 function News() {
 
-  const { token } = React.useContext(UserContext);
-
-  const [notificationIsCalled, setNotificationIsCalled] = React.useState(false);
-  const callNotification = () => {
-    setNotificationIsCalled(true);
-  }
+  const [posts, setPosts] = React.useState([]);
 
   return (
     <div className='content'>
-      {notificationIsCalled && <Notification msg='не получилось добавить в друзья' close={setNotificationIsCalled} />}
-      <button onClick={callNotification}>
-        добавить в др
-      </button>
     </div>
   )
 }

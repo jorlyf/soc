@@ -1,25 +1,41 @@
 import React from 'react';
 
-import UserContext from '../../UserContext';
+import { UserContext } from '../../contexts';
+import Logout from '../Auth/Logout';
+
 import axios from 'axios';
-import styles from './Profile.module.scss';
 import { Redirect, useParams } from 'react-router-dom';
+import OtherProfile from './OtherProfile';
+import MyProfile from './MyProfile';
 
 function Profile() {
   const { id } = useParams();
   const [profileInfo, setProfileInfo] = React.useState({});
-  const { isLogged } = React.useContext(UserContext);
+  const { token, isLogged, setNotificationIsCalled, setMsgNotification } = React.useContext(UserContext);
+  const [isMyProfile, setIsMyProfile] = React.useState(false);
+  async function fetchId() {
+    const res = await axios.post('/auth/fetchId', { 'data': token })
+    if (res.data.status === 200) {
+      const myId = res.data.id;
+      if (+myId === +id) {
+        setIsMyProfile(true);
+      }
+      localStorage.setItem('userId', id);
+    } else {
+      Logout();
+    }
+  }
 
   React.useEffect(() => {
-    async function fetch() {
-      const res = await axios.get(`/getProfileById/${id}`);
-      console.log(res.data.status);
-      if (res.data.status === 200) {
-        setProfileInfo(res.data);
-      }
-    }
     if (isLogged) {
-      fetch();
+      { fetchId() };
+      (async () => {
+        const res = await axios.get(`/getProfileById/${id}`);
+        console.log(res.data.status);
+        if (res.data.status === 200) {
+          setProfileInfo(res.data.info);
+        }
+      })();
     }
   }, []);
 
@@ -29,24 +45,11 @@ function Profile() {
 
   return (
     <div className='content'>
-      <span className={styles.isOnline}>{profileInfo.isOnline ? 'на зоне' : 'дрыхнет'}</span>
-      <div className={styles.main}>
-        <div className={styles.mainProfile}>
-          <img src={window.location.origin + '/profileAvatars/icon.jpg'} width={250} height={250} alt='' />
-          <div>
-            <p>оставить записку</p>
-          </div>
-        </div>
-
-        <div className={styles.info}>
-          <p>
-            {profileInfo.login}
-          </p>
-          <p>{profileInfo.profileStatus && 'пишет о себе:  ' + profileInfo.profileStatus}</p>
-          <p>{profileInfo.profileRegisterDate && 'сидит с ' + profileInfo.profileRegisterDate}</p>
-        </div>
-      </div>
-
+      {isMyProfile ?
+        <MyProfile profileInfo={profileInfo} />
+        :
+        <OtherProfile profileInfo={profileInfo} />
+      }
     </div>
   )
 }

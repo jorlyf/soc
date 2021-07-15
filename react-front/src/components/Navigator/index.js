@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { Link } from 'react-router-dom';
-import UserContext from '../../UserContext';
+import { UserContext } from '../../contexts';
 import styles from './Navigator.module.scss';
 
 function Navigator() {

@@ -1,3 +1,4 @@
 from pathlib import Path
 
-baseDir = str(Path.cwd()) + '\\flask-back'
+baseDirFlask = str(Path.cwd()) + '\\flask-back'
+baseDirProject = str(Path.cwd())

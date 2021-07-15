@@ -1,0 +1,12 @@
+.exit {
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    padding-left: 8px;
+    transition: 0.1s ease-in-out;
+    fill: white;
+    &:hover {
+      transform: translateY(-1.5px);
+      fill: red;
+    }
+}

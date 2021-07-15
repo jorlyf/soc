@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import UserContext from '../../UserContext';
+import { UserContext } from '../../contexts';
 import { refreshPage } from '../../scripts';
 
 import styles from './Auth.module.scss';
@@ -26,7 +26,7 @@ function Login() {
     const res = await axios.post('/auth/login', { 'data': data });
     if (res.data.status === 200) {
       localStorage.setItem('token', res.data.token);
-      localStorage.setItem('userId', res.data.userId)
+      localStorage.setItem('userId', res.data.userId);
       history.push('/');
       refreshPage();
     } else {

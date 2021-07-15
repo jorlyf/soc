@@ -1,10 +1,8 @@
 import React from 'react';
-import UserContext from '../../UserContext';
+import { UserContext } from '../../contexts';
 import axios from 'axios';
 import styles from './Friends.module.scss';
 import { Redirect } from 'react-router-dom';
-
-import { loggedRequired } from '../../scripts';
 
 function Friends() {
     const [friends, setFriends] = React.useState([]);
@@ -17,7 +15,7 @@ function Friends() {
         }
         if (isLogged) {
             fetch();
-        } 
+        }
     }, [])
 
     if (!isLogged) {

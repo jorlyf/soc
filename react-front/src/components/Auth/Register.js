@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import UserContext from '../../UserContext';
+import { UserContext } from '../../contexts';
 
 import styles from './Auth.module.scss';
 import { Link, useHistory, Redirect } from 'react-router-dom';
