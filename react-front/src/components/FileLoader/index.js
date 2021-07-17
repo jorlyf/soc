@@ -3,11 +3,17 @@ import axios from 'axios';
 import styles from './FileLoader.module.scss';
 import { UserContext } from "../../contexts";
 
+import { ExitBtn } from '../Btns';
+
 export default function FileLoader({ closeFunction, apiUrl, maxFileSize, setAvatarUrl }) {
 
     const [msg, setMsg] = React.useState('');
     const { token } = React.useContext(UserContext);
     const inputFile = React.useRef(null);
+
+    React.useEffect(() => {
+        document.addEventListener('click', (e) => handleOutsideClick(e));
+    }, [])
 
     function checkFileSize(fileSize) {
         return fileSize <= maxFileSize;
@@ -23,13 +29,11 @@ export default function FileLoader({ closeFunction, apiUrl, maxFileSize, setAvat
             setAvatarUrl(res.data.avatarUrl);
             setTimeout(() => {
                 closeFunction();
-                setMsg('');
             }, 2000);
         } else {
             setMsg('не палучилас');
             setTimeout(() => {
                 closeFunction();
-                setMsg('');
             }, 2000);
         }
     }
@@ -42,30 +46,33 @@ export default function FileLoader({ closeFunction, apiUrl, maxFileSize, setAvat
         } else if (checkFileSize(file.size)) {
             sendFile(file);
         } else {
-            alert('размер файла соу биг');
+            alert('слишком большой');
         }
-        console.log(file);
     }
 
     const handleClick = () => {
         inputFile.current.click();
-        //closeFunction(false);
     }
 
-    const handleOutsideClick = () => {
-        closeFunction(false);
+    const overlay = React.createRef(null);
+
+    const handleOutsideClick = (e) => {
+        if (e.target === overlay.current) {
+            closeFunction(false);
+        }
     }
 
     return (
-        <div className={styles.main}>
+        <div ref={overlay} className={styles.main}>
             <div>
                 {msg
                     ?
                     <span>{msg}</span>
                     :
                     <>
-                        <img onClick={handleClick} src='/load.png' />
                         <form onSubmit={handleSubmit}>
+                            <img onClick={handleClick} src='/load.png' />
+                            <ExitBtn closeFunction={() => closeFunction(false)} />
                             <input
                                 type='file'
                                 ref={inputFile}

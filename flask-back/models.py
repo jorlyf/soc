@@ -61,6 +61,10 @@ class Profiles(db.Model):
         self.avatar_url = avatarUrl
         db.session.commit()
 
+    def updateStatus(self, status):
+        self.status = status
+        db.session.commit()
+
 
 
 class Friendships(db.Model):

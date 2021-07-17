@@ -5,12 +5,12 @@ import { UserContext } from '../../contexts';
 import styles from './Navigator.module.scss';
 
 function Navigator() {
-  const { currentUserId, isLogged } = React.useContext(UserContext);
+  const { currentUserId } = React.useContext(UserContext);
 
   const navigationList = [
     { title: 'стенгазета', url: '/' },
     { title: 'моя параша', url: `/profile/${currentUserId}` },
-    { title: 'сокамерники', url: '/friends' },
+    { title: 'сокамерники', url: `/friends/${currentUserId}` },
     { title: 'шептунка', url: '/dialog' },
     { title: 'приколюхи', url: '/prikol' },
     { title: 'смена погоняла', url: '/settings' }

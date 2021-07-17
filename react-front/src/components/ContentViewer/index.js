@@ -6,7 +6,7 @@ function ContentViewer({url, setUrl}) {
     const handleClose = () => {
         setUrl('');
     } // if have url it will render
-    console.log(url);
+
     return (
         <div className={styles.main}>
             <img src={url} />

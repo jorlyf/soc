@@ -20,7 +20,7 @@ function Profile() {
       if (+myId === +id) {
         setIsMyProfile(true);
       }
-      localStorage.setItem('userId', id);
+      localStorage.setItem('userId', res.data.id);
     } else {
       Logout();
     }

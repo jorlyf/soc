@@ -18,3 +18,9 @@ export function ExitBtn({ closeFunction }) {
         </svg>
     )
 }
+
+export function FriendProfileButton({value, onClick}) {
+    return (
+        <button onClick={onClick} >{value}</button>
+    )
+}

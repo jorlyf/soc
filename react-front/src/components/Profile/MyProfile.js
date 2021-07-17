@@ -1,20 +1,30 @@
 import React from 'react';
 
 import FileLoader from '../FileLoader';
-import { AppContext, UserContext } from '../../contexts';
+import InputField from '../InputField';
+
+import { AppContext } from '../../contexts';
 import styles from './Profile.module.scss';
 function MyProfile({ profileInfo }) {
 
     const { setUrlContentViewer } = React.useContext(AppContext)
+
     const [fileLoaderIsOpen, setFileLoaderIsOpen] = React.useState(false);
+    const [inputFieldIsOpen, setInputFieldIsOpen] = React.useState(false);
+
     const [avatarUrl, setAvatarUrl] = React.useState('');
+    const [profileStatus, setProfileStatus] = React.useState('');
 
     const handleClickAvatar = () => {
         setUrlContentViewer(getUrlAvatar())
     }
 
-    const handleChangeAvatar = async () => {
+    const handleChangeAvatar = () => {
         setFileLoaderIsOpen(true);
+    }
+
+    const handleChangeStatus = () => {
+        setInputFieldIsOpen(true);
     }
 
     const getUrlAvatar = () => {
@@ -25,6 +35,7 @@ function MyProfile({ profileInfo }) {
 
     return (
         <>
+            {inputFieldIsOpen && <InputField closeFunction={setInputFieldIsOpen} msg='введи новый статус' apiUrl='/uploadProfileStatus' previousValue={profileInfo.status} setNewProfileStatus={setProfileStatus} />}
             {fileLoaderIsOpen && <FileLoader closeFunction={setFileLoaderIsOpen} apiUrl='/uploadAvatar' maxFileSize={4096000} setAvatarUrl={setAvatarUrl} />}
             <span className={styles.isOnline}>{profileInfo.isOnline ? 'на зоне' : 'дрыхнет'}</span>
             <p className={styles.registerDate}>{profileInfo.registerDate && 'сидит с ' + profileInfo.registerDate + ' мск'}</p>
@@ -37,7 +48,7 @@ function MyProfile({ profileInfo }) {
                     }
                     <div>
                         <button onClick={handleChangeAvatar}>изменить фотку</button>
-                        <button>изменить статус</button>
+                        <button onClick={handleChangeStatus}>изменить статус</button>
                     </div>
                 </div>
 
@@ -45,7 +56,12 @@ function MyProfile({ profileInfo }) {
                     <p className={styles.login}>
                         {profileInfo.login}
                     </p>
-                    <p>{profileInfo.status && 'пишет о себе:  ' + profileInfo.status}</p>
+                    {profileStatus
+                        ?
+                        <p>{profileStatus}</p>
+                        :
+                        <p>{profileInfo.status && profileInfo.status}</p>
+                    }
                 </div>
             </div>
         </>
