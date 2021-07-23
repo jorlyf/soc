@@ -1,7 +1,6 @@
 from dataBase import db
 
-
-class Friends:
+class DbFriends:
     def __init__(self, friendshipList):  #need a friendList model object
         self.friendshipList = friendshipList
 
@@ -16,4 +15,15 @@ class Friends:
         pass
 
     def checkMutually(self):
-        print()
+        pass
+
+    def getAllInfoForFriendListUser(self):
+        profsList = []
+        for i in self.friendshipList:
+            prf = {}
+            prf['login'] = i.profile.user.login
+            prf['last_online'] = i.profile.last_online
+            prf['avatar_url'] = i.profile.avatar_url
+            profsList.append(prf)
+
+        return {"profiles": profsList}

@@ -12,6 +12,7 @@ function Friends() {
         async function fetch() {
             const res = await axios.get(`/getFriends/${currentUserId}`);
             setFriends(res.data.profiles);
+            console.log(res.data.profiles);
         }
         if (isLogged) {
             fetch();
@@ -25,10 +26,18 @@ function Friends() {
     return (
         <div className='content'>
             <div className={styles.friendMainBlock}>
+                {console.log(friends)}
                 {friends.length > 0 ?
-                    friends.map((e) => (
-                        <div>
-                            <p key={e.login}>{e.login}</p>
+                    friends.map((e, index) => (
+                        <div className={styles.oneFriend} key={index}>
+
+                            <div className={styles.avatarInfo}>
+                                <img className={styles.avatar} key={e.avatar_url} src={`/profileAvatars/${e.avatar_url}`} />
+                            </div>
+                            <div className={styles.info}>
+                                <p className={styles.login} key={e.login}>{e.login}</p>
+                            </div>
+
                         </div>
                     )) :
                     <p className={styles.notFriends}>че петух друзей нет?</p>}

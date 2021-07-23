@@ -4,8 +4,8 @@ from routes.DbAuth import DbAuth
 from routes.JwtAuth import JwtAuth
 from routes.jwtRequired import tokenRequired
 from routes.DbProfile import DbProfile
+from routes.DbFriends import DbFriends
 
-from routes.Friends import Friends
 from utils.times import formatTime
 
 profile = Blueprint('profile', __name__)
@@ -18,12 +18,12 @@ dbProfile = DbProfile()
 def getProfileById(id):
     user = dbAuth.getUserById(id)
     if user:
-        friendsArray = Friends(user.profile.friends).getFriendProfiles()
+        friendsArray = DbFriends(user.profile.friends).getFriendProfiles()
         friendsSerialized = []
         for profile in friendsArray:
             serialized = profile.serializeForFriendList()
             friendsSerialized.append(serialized)
-        Friends(user.profile.friends).checkMutually()
+        DbFriends(user.profile.friends).checkMutually()
         info = {
             "id": user.id,
             "login": user.login,
@@ -58,15 +58,9 @@ def beFriends(friendId): #updateOnline +
 @profile.route('/getFriends/<int:id>')
 def getFriends(id):
     user = dbAuth.getUserById(id)
-    friends = user.profile.friends
-    profsList = []
-    for i in friends:
-        prf = {}
-        prf['login'] = i.user.login
-        profsList.append(prf)
-
-    print(profsList)
-    return {"profiles": profsList}
+    friendship = user.profile.friends
+    friends = DbFriends(friendship).getAllInfoForFriendListUser()
+    return friends
 
 
 @profile.route('/uploadAvatar', methods=['GET', 'POST'])
