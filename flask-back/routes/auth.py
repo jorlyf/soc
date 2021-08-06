@@ -11,17 +11,6 @@ auth = Blueprint('auth', __name__)
 questionList = json.load(
     open(baseDirFlask + '\settings\\regQuestions.json', encoding='utf-8'))
 
-
-@auth.route('/auth/fetchId', methods=['GET', 'POST'])
-def fetchId():
-    req = request.get_json(force=True)
-    token = req.get('data')
-    decoded = jwtAuth.decodeToken(token)
-    if decoded['status'] == 200:
-        return {"status": 200, "id": decoded['token']['id']}
-    return {"status": 400}
-
-
 @auth.route('/auth/register', methods=['GET', 'POST'])
 def registerUser():
     req = request.get_json(force=True)
@@ -31,7 +20,6 @@ def registerUser():
         return {"status": 200}
 
     return {"status": 400}
-
 
 @auth.route('/auth/login', methods=['GET', 'POST'])
 def loginUser():
@@ -47,14 +35,12 @@ def loginUser():
         }
     return {"status": 400}
 
-
 @auth.route('/auth/getQuestions', methods=['GET'])
 def getQuestions():
     return jsonify(questionList)
 
-
 @auth.route('/auth/checkMyToken', methods=['GET', 'POST'])
 def checkMyToken():
     req = request.get_json(force=True)
-    token = req.get('data')
+    token = req.get('token')
     return jwtAuth.decodeToken(token)

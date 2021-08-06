@@ -1,16 +1,16 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
-import { UserContext } from '../../contexts';
 import styles from './Navigator.module.scss';
 
 function Navigator() {
-  const { currentUserId } = React.useContext(UserContext);
+  const USER_ID = useSelector(state => state.auth.USER_ID);
 
   const navigationList = [
     { title: 'стенгазета', url: '/' },
-    { title: 'моя параша', url: `/profile/${currentUserId}` },
-    { title: 'сокамерники', url: `/friends/${currentUserId}` },
+    { title: 'моя параша', url: `/profile/${USER_ID}` },
+    { title: 'сокамерники', url: `/friends/${USER_ID}` },
     { title: 'шептунка', url: '/dialog' },
     { title: 'приколюхи', url: '/prikol' },
     { title: 'смена погоняла', url: '/settings' }

@@ -1,17 +1,16 @@
 import React from 'react';
-
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import { ExitBtn } from '../Btns';
 import styles from './InputField.module.scss';
-import { UserContext } from '../../contexts';
 
 export default function InputField({ closeFunction, msg, apiUrl, previousValue, setNewProfileStatus }) {
 
     const overlay = React.useRef(null);
     const [serverAnswer, setServerAnswer] = React.useState('');
 
-    const { token } = React.useContext(UserContext);
+    const ACCESS_TOKEN = useSelector(state => state.auth.ACCESS_TOKEN);
 
     React.useEffect(() => {
         document.addEventListener('click', (e) => handleOutsideClick(e));
@@ -23,7 +22,7 @@ export default function InputField({ closeFunction, msg, apiUrl, previousValue, 
         }
     }
 
-    const [text, setText] = React.useState('');
+    const [text, setText] = React.useState(previousValue);
 
     const handleChangeText = (e) => {
         setText(e.target.value);
@@ -36,7 +35,7 @@ export default function InputField({ closeFunction, msg, apiUrl, previousValue, 
     const handleSendStatus = async () => {
         const cText = text;
         if (checkStatusBeforeSend()) {
-            const res = await axios.post(apiUrl, { 'data': cText, 'token': token });
+            const res = await axios.post(apiUrl, { 'data': cText, 'token': ACCESS_TOKEN });
             if (res.data.status === 200) {
                 setNewProfileStatus(cText);
                 setServerAnswer('палучилас');
@@ -44,13 +43,16 @@ export default function InputField({ closeFunction, msg, apiUrl, previousValue, 
                     closeFunction();
                 }, 2000);
             } else {
-                setServerAnswer('не палучилас');
+                setServerAnswer('не палучилас пачемуто');
                 setTimeout(() => {
                     closeFunction();
                 }, 2000);
             }
         } else {
-            alert('сказал же 255 букв');
+            setServerAnswer('сказал же 255 букв');
+            setTimeout(() => {
+                closeFunction();
+            }, 2000);
         }
     }
 
@@ -64,7 +66,7 @@ export default function InputField({ closeFunction, msg, apiUrl, previousValue, 
                     <>
                         {msg && <span>{msg}</span>}
                         <ExitBtn closeFunction={() => closeFunction(false)} />
-                        <textarea onChange={handleChangeText} value={text} placeholder='не больше 255 буков'>{previousValue}</textarea>
+                        <textarea onChange={handleChangeText} value={text} placeholder='не больше 255 буков'></textarea>
                         <button onClick={handleSendStatus}>пойдет</button>
                     </>}
             </div>

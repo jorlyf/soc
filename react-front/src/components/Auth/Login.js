@@ -1,15 +1,15 @@
 import React from 'react';
 import axios from 'axios';
-import { UserContext } from '../../contexts';
 import { refreshPage } from '../../scripts';
 
 import styles from './Auth.module.scss';
 import { Link, useHistory, Redirect } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function Login() {
+  const AUTHORIZE_STATUS = useSelector(state => state.auth.AUTHORIZE_STATUS)
 
   const history = useHistory();
-  const { isLogged } = React.useContext(UserContext);
 
   const onChangeLogin = (e) => {
     setLogin(e.target.value);
@@ -25,8 +25,7 @@ function Login() {
     const data = prepareData();
     const res = await axios.post('/auth/login', { 'data': data });
     if (res.data.status === 200) {
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('userId', res.data.userId);
+      localStorage.setItem('accesToken', res.data.token);
       history.push('/');
       refreshPage();
     } else {
@@ -38,7 +37,7 @@ function Login() {
 
   return (
     <div className={styles.main}>
-      {isLogged && <Redirect to='/' />}
+      {AUTHORIZE_STATUS && <Redirect to='/' />}
       <Link to='register'>
         <button className={styles.btnChangeHref}>я тут впервые</button>
       </Link>

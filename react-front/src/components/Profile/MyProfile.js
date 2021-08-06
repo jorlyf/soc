@@ -5,6 +5,9 @@ import InputField from '../InputField';
 
 import { AppContext } from '../../contexts';
 import styles from './Profile.module.scss';
+import { SimpleButton } from '../Btns';
+
+
 function MyProfile({ profileInfo }) {
 
     const { setUrlContentViewer } = React.useContext(AppContext)
@@ -29,7 +32,11 @@ function MyProfile({ profileInfo }) {
 
     const getUrlAvatar = () => {
         if (profileInfo.avatarUrl) {
-            return `/profileAvatars/${profileInfo.avatarUrl}`;
+            if (avatarUrl) {
+                return `/profileAvatars/${avatarUrl}`;
+            } else {
+                return `/profileAvatars/${profileInfo.avatarUrl}`;
+            }
         } return '/profileAvatars/default.jpg';
     }
 
@@ -47,8 +54,8 @@ function MyProfile({ profileInfo }) {
                         <img onClick={handleClickAvatar} src={getUrlAvatar()} alt='' />
                     }
                     <div>
-                        <button onClick={handleChangeAvatar}>изменить фотку</button>
-                        <button onClick={handleChangeStatus}>изменить статус</button>
+                        <SimpleButton onClick={handleChangeAvatar} value='изменить фотку' />
+                        <SimpleButton onClick={handleChangeStatus} value='изменить статус' />
                     </div>
                 </div>
 
@@ -62,6 +69,13 @@ function MyProfile({ profileInfo }) {
                         :
                         <p>{profileInfo.status && profileInfo.status}</p>
                     }
+                    <ul className={styles.friends}>
+                        <li>
+                            <img />
+                        </li>
+                        <li>б</li>
+                        <li>в</li>
+                    </ul>
                 </div>
             </div>
         </>

@@ -19,8 +19,17 @@ export function ExitBtn({ closeFunction }) {
     )
 }
 
-export function FriendProfileButton({value, onClick}) {
+export function SimpleButton({ value, onClick }) {
     return (
-        <button onClick={onClick} >{value}</button>
+        <button className={styles.SimpleButton} onClick={onClick} ><span>{value}</span></button>
+    )
+}
+
+export function HoverButton({ value, onClick, textOnHover }) {
+    return (
+        <button className={styles.FriendButton} onClick={onClick} >
+            <span className={styles.standard}>{value}</span>
+            <span className={styles.onHover}>{textOnHover}</span>
+        </button>
     )
 }

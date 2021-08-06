@@ -4,6 +4,6 @@ jwtAuth = JwtAuth()
 def tokenRequired(token):
     decoded = jwtAuth.decodeToken(token)
     if decoded['status'] == 200:
-        return {'status': True, 'id': decoded['token']['id']}
+        return {'status': True, 'id': decoded['payload']['id']}
     else: return {'status': False}
     

@@ -4,9 +4,12 @@ from routes.DbAuth import DbAuth
 from routes.JwtAuth import JwtAuth
 from routes.jwtRequired import tokenRequired
 from routes.DbProfile import DbProfile
-from routes.DbFriends import DbFriends
+from routes.friendsSystem import FriendSystem
+
+from models import getFriendStatus
 
 from utils.times import formatTime
+from utils.isMyId import checkIsMyId
 
 profile = Blueprint('profile', __name__)
 dbAuth = DbAuth()
@@ -14,53 +17,85 @@ jwtAuth = JwtAuth()
 dbProfile = DbProfile()
 
 
-@profile.route('/getProfileById/<int:id>', methods=['GET'])
+@profile.route('/getProfileById/<int:id>', methods=['GET', 'POST'])
 def getProfileById(id):
     user = dbAuth.getUserById(id)
+    req = request.get_json(force=True)
+    token = req.get('token')
+
     if user:
-        friendsArray = DbFriends(user.profile.friends).getFriendProfiles()
-        friendsSerialized = []
-        for profile in friendsArray:
-            serialized = profile.serializeForFriendList()
-            friendsSerialized.append(serialized)
-        DbFriends(user.profile.friends).checkMutually()
+        friends = FriendSystem(user).getSerializedAcceptedFriends()
+        requesterId = 0
+        isAccepted = False
+        
+        if token:
+            encoded = tokenRequired(token)
+            if encoded['status'] == True:
+                if not checkIsMyId(encoded['id'], id):
+                    fs = getFriendStatus(encoded['id'], id)
+
+                    if fs['status']:
+                        requesterId = fs['requester_id']
+                        isAccepted = fs['is_accepted']
+            else:
+                return {"status": 401}
         info = {
             "id": user.id,
             "login": user.login,
             "avatarUrl": user.profile.avatar_url,
             "status": user.profile.status,
-            "friends": friendsSerialized,
+            "friends": friends,
             "registerDate": formatTime(user.profile.register_date),
             "lastOnline": user.profile.last_online,
+            "ourFriendship" : {"requesterId": requesterId, "isAccepted": isAccepted}
         }
         return {"status": 200, "info": info}
     return {"status": 404}
 
-
-@profile.route('/beFriends/<int:friendId>', methods=['GET', 'POST'])
-def beFriends(friendId): #updateOnline +
+@profile.route('/addFriend/<int:friendId>', methods=['GET', 'POST'])
+def addFriend(friendId): #updateOnline +
     req = request.get_json(force=True)
     token = req.get('token')
+    if token:
+        encoded = tokenRequired(token)
+        if encoded['status']:
+            userId = encoded['id']
+            user = dbAuth.getUserById(userId)
+            friend = dbAuth.getUserById(friendId)
 
-    encoded = tokenRequired(token)
-    if encoded['status'] == True:
-        userId = encoded['id']
-        user = dbAuth.getUserById(userId)
-        user.profile.updateLastOnline()
+            user.profile.updateLastOnline()
 
-        friend = dbAuth.getUserById(friendId)
-        user.profile.addFriend(friend)
-        return {'status': 200}
+            status = user.profile.addFriendship(friend)
+            return {'status': status}
+        else:
+            return {'status': 401}
     else:
-        return {'status': 401}
+        return {'status': 400}
 
+@profile.route('/deleteFriend/<int:friendId>', methods=['GET', 'POST'])
+def deleteFriend(friendId): #updateOnline +
+    req = request.get_json(force=True)
+    token = req.get('token')
+    if token:
+        encoded = tokenRequired(token)
+        if encoded['status']:
+            userId = encoded['id']
+            user = dbAuth.getUserById(userId)
+            friend = dbAuth.getUserById(friendId)
 
+            user.profile.updateLastOnline()
+
+            status = user.profile.deleteFriendship(friend)
+            return {'status': status}
+        else:
+            return {'status': 401}
+    else:
+        return {'status': 400}
 @profile.route('/getFriends/<int:id>')
 def getFriends(id):
     user = dbAuth.getUserById(id)
-    friendship = user.profile.friends
-    friends = DbFriends(friendship).getAllInfoForFriendListUser()
-    return friends
+    acceptedFriends = FriendSystem(user).getSerializedAcceptedFriends()
+    return {"status": 200, "acceptedFriends": acceptedFriends}
 
 
 @profile.route('/uploadAvatar', methods=['GET', 'POST'])

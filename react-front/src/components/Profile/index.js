@@ -1,47 +1,31 @@
 import React from 'react';
 
-import { UserContext } from '../../contexts';
-import Logout from '../Auth/Logout';
-
 import axios from 'axios';
-import { Redirect, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import OtherProfile from './OtherProfile';
 import MyProfile from './MyProfile';
+import { useSelector } from 'react-redux';
 
 function Profile() {
   const { id } = useParams();
   const [profileInfo, setProfileInfo] = React.useState({});
-  const { token, isLogged, setNotificationIsCalled, setMsgNotification } = React.useContext(UserContext);
-  const [isMyProfile, setIsMyProfile] = React.useState(false);
-  async function fetchId() {
-    const res = await axios.post('/auth/fetchId', { 'data': token })
-    if (res.data.status === 200) {
-      const myId = res.data.id;
-      if (+myId === +id) {
-        setIsMyProfile(true);
-      }
-      localStorage.setItem('userId', res.data.id);
-    } else {
-      Logout();
-    }
-  }
+
+  const ACCESS_TOKEN = useSelector(state => state.auth.ACCESS_TOKEN);
+  const USER_ID = useSelector(state => state.auth.USER_ID);
+
+  const [isMyProfile, setIsMyProfile] = React.useState();
 
   React.useEffect(() => {
-    if (isLogged) {
-      { fetchId() };
+    if (id && ACCESS_TOKEN) {
       (async () => {
-        const res = await axios.get(`/getProfileById/${id}`);
-        console.log(res.data.status);
+        const res = await axios.post(`/getProfileById/${id}`, { token: ACCESS_TOKEN });
         if (res.data.status === 200) {
           setProfileInfo(res.data.info);
+          setIsMyProfile(USER_ID === +id);
         }
       })();
     }
-  }, []);
-
-  if (!isLogged) {
-    return (<Redirect to='/login' />)
-  }
+  }, [id, ACCESS_TOKEN]);
 
   return (
     <div className='content'>

@@ -1,5 +1,7 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 
 import './main.css';
 import styles from './App.module.scss';
@@ -14,66 +16,67 @@ import Friends from './components/Friends';
 import Notification from './components/Notification';
 import ContentViewer from './components/ContentViewer';
 
-import { UserContext } from './contexts';
 import { AppContext } from './contexts';
 
 function App() {
 
-  const tok = localStorage.getItem('token');
-  const cui = localStorage.getItem('userId');
+  const tokenFromLS = localStorage.getItem('accesToken');
 
-  function checkIsLogged() {
-    if (token) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  const [token, setToken] = React.useState(tok);
-  const [currentUserId, setCurrentUserId] = React.useState(cui);
-  const [isLogged, setIsLogged] = React.useState(checkIsLogged);
+  const dispatch = useDispatch();
+  React.useEffect(() => {
+    (async () => {
+      if (tokenFromLS) {
+        const res = await axios.post('/auth/checkMyToken', { 'token': tokenFromLS });
+        if (res.data.status === 200) {
+          dispatch({ type: 'SET_USER_ID', payload: res.data.payload.id });
+          dispatch({ type: 'SET_ACCESS_TOKEN', payload: tokenFromLS });
+          dispatch({ type: 'SET_AUTHORIZE_STATUS', payload: true });
+        }
+      }
+    })();
+  }, [])
 
   const [notificationIsCalled, setNotificationIsCalled] = React.useState(false);
   const [msgNotification, setMsgNotification] = React.useState('');
 
   const [urlContentViewer, setUrlContentViewer] = React.useState('');
 
+  const USER_ID = useSelector(state => state.auth.USER_ID);
+
   return (
     <>
+
       <AppContext.Provider value={{ setUrlContentViewer }} >
-        <UserContext.Provider value={{ token, isLogged, currentUserId, setNotificationIsCalled, setMsgNotification }}>
-          <Header />
-          {notificationIsCalled && <Notification msg={msgNotification} close={setNotificationIsCalled} />}
-          {currentUserId}
+        <Header />
+        {USER_ID}
+        {notificationIsCalled && <Notification msg={msgNotification} close={setNotificationIsCalled} />}
 
-          {urlContentViewer && <ContentViewer url={urlContentViewer} setUrl={setUrlContentViewer} />}
+        {urlContentViewer && <ContentViewer url={urlContentViewer} setUrl={setUrlContentViewer} />}
 
-          <div className={styles.contentBlock} >
-            <Switch>
+        <div className={styles.contentBlock} >
+          <Switch>
 
-              <Route path='/' exact>
-                <Navigator />
-                <News />
-              </Route>
-              <Route path='/profile/:id' exact>
-                <Navigator />
-                <Profile />
-              </Route>
-              <Route path='/register' exact>
-                <Register />
-              </Route>
-              <Route path='/login' exact>
-                <Login />
-              </Route>
-              <Route path='/friends/:id' exact>
-                <Navigator />
-                <Friends />
-              </Route>
+            <Route path='/' exact>
+              <Navigator />
+              <News />
+            </Route>
+            <Route path='/profile/:id' exact>
+              <Navigator />
+              <Profile />
+            </Route>
+            <Route path='/register' exact>
+              <Register />
+            </Route>
+            <Route path='/login' exact>
+              <Login />
+            </Route>
+            <Route path='/friends/:id' exact>
+              <Navigator />
+              <Friends />
+            </Route>
 
-            </Switch>
-          </div>
-        </UserContext.Provider>
+          </Switch>
+        </div>
       </AppContext.Provider>
     </>
   );

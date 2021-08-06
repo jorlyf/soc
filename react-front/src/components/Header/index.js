@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { UserContext } from '../../contexts';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import Logout from '../Auth/Logout';
 
 import styles from './Header.module.scss';
-import { Link, Redirect } from 'react-router-dom';
 
-function Header() {
-    const { isLogged } = React.useContext(UserContext);
+function Header() { 
+    const AUTHORIZE_STATUS = useSelector((state) => state.auth.AUTHORIZE_STATUS);
 
     return (
         <header>
@@ -18,7 +18,7 @@ function Header() {
                 </Link>
             </div>
             <div className={styles.auth}>
-                {isLogged ?
+                {AUTHORIZE_STATUS ?
                     <button onClick={Logout}>
                         уйти с параши
                     </button> :

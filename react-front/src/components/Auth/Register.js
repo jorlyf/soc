@@ -1,14 +1,14 @@
 import React from 'react';
 import axios from 'axios';
-import { UserContext } from '../../contexts';
+import { useSelector } from 'react-redux';
 
 import styles from './Auth.module.scss';
 import { Link, useHistory, Redirect } from 'react-router-dom';
 
 function Register() {
+  const AUTHORIZE_STATUS = useSelector((state) => state.auth.AUTHORIZE_STATUS);
 
   const history = useHistory();
-  const { isLogged } = React.useContext(UserContext);
 
   const onChangeLoginInput = (e) => {
     setLoginInput(e.target.value);
@@ -79,7 +79,7 @@ function Register() {
 
   return (
     <div className={styles.main}>
-      {isLogged && <Redirect to='/' />}
+      {AUTHORIZE_STATUS && <Redirect to='/' />}
       <Link to='login'>
         <button className={styles.btnChangeHref}>я тут уже давно</button>
       </Link>

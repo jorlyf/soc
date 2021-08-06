@@ -16,8 +16,8 @@ class JwtAuth:
             nowTime = getTime().timestamp()
 
             if decodeToken['exp'] < nowTime:
-                return {'status': 400, 'token': 'token is timeout'}
-            return {'status': 200, 'token': decodeToken}
+                return {'status': 400, 'payload': 'token is timeout'}
+            return {'status': 200, 'payload': decodeToken}
         except:
-            return {'status': 400, 'token': 'token is invalid'}
+            return {'status': 400, 'payload': 'token is invalid'}
 

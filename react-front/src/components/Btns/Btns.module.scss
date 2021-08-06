@@ -1,12 +1,53 @@
+.SimpleButton {
+  display         : block;
+  margin          : 10px auto;
+  background-color: rgba(65, 105, 225, 0.15);
+  border          : 2px solid rgba(0, 0, 0, 0.1);
+  border-radius   : 8px;
+  width           : 85%;
+  height          : 30px;
+  cursor          : pointer;
+
+  &:hover {
+    background-color: rgba(65, 105, 225, 0.2);
+  }
+}
+
+.FriendButton {
+  display         : block;
+  margin          : 10px auto;
+  background-color: rgba(65, 105, 225, 0.15);
+  border          : 2px solid rgba(0, 0, 0, 0.1);
+  border-radius   : 8px;
+  width           : 85%;
+  height          : 30px;
+  cursor          : pointer;
+
+  .onHover {
+    display: none;
+  }
+  &:hover .onHover {
+    display: block;
+  }
+  &:hover .standard {
+    display: none;
+  }
+
+  &:hover {
+    background-color: rgba(65, 105, 225, 0.2);
+  }
+}
+
 .exit {
-    cursor: pointer;
-    width: 32px;
-    height: 32px;
-    padding-left: 8px;
-    transition: 0.1s ease-in-out;
-    fill: white;
-    &:hover {
-      transform: translateY(-1.5px);
-      fill: red;
-    }
+  cursor      : pointer;
+  width       : 32px;
+  height      : 32px;
+  padding-left: 8px;
+  transition  : 0.1s ease-in-out;
+  fill        : white;
+
+  &:hover {
+    transform: translateY(-1.5px);
+    fill     : red;
+  }
 }
