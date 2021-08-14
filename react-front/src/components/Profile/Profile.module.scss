@@ -22,7 +22,10 @@
   width: max-content;
   height: max-content;
   border-radius: 5px;
-  img {
+  border: 2px solid rgba(0, 0, 0, 0.025);
+  background-color: rgba(0, 100, 255, 0.02);
+
+  .avatarImage {
     margin: 0 auto;
     min-width: 200px;
     max-width: 350px;
@@ -34,14 +37,15 @@
     object-fit: contain;
   }
   div {
+    align-self: center;
     margin: 0;
     font-size: 18px;
   }
 }
 .info {
-  margin-right: 200px;
-  margin-left: auto;
-  padding-left: 80px;
+  margin-right: 40px;
+  margin-left: 10%;
+  width: 100%;
   .login {
     font-weight: bold;
     font-size: 28px;
@@ -49,28 +53,38 @@
   p {
     margin: 0;
   }
-  .friends {
-    display: flex;
-    list-style-type: none;
-    width: 100%;
-    
-    li {
-      display: block;
-      width: 90px;
-      height: 50px;
-      background-color: rgba(140, 100, 145, 0.025);
+}
+.notFound {
+  display: block;
+  width: max-content;
+  margin: 20px auto;
+  font-size: 40px;
+}
+.friendList {
+  width: 328px;
+  height: auto;
+  background-color: rgba(140, 100, 145, 0.025);
+  list-style: none;
+  margin: 0;
+  margin-top: 10px;
+  padding: 0;
+  border: 2px solid rgba(0, 0, 0, 0.025);
+  span {
+    display: block;
+    font-size: 24px;
+    text-align: center;
+  }
+  li {
+    display: inline-block;
+    width: 100px;
+    height: 110px;
+    padding: 4px;
+    text-align: center;
+    font-size: 18px;
+    img {
+      max-width: 100px;
+      max-height: 100px;
       border: 2px solid rgba(0, 0, 0, 0.1);
-      border-radius: 3px;
-      img {
-        margin: 0 auto;
-        max-width: 60px;
-        max-height: 80px;
-        cursor: pointer;
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        border-radius: 2px;
-        overflow: hidden;
-        object-fit: contain;
-      }
     }
   }
 }

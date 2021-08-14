@@ -2,11 +2,13 @@ import React from 'react';
 
 import FileLoader from '../FileLoader';
 import InputField from '../InputField';
-
 import { AppContext } from '../../contexts';
-import styles from './Profile.module.scss';
+
+import { Posts } from '../Posts';
+import { ProfileFriendList } from './ProfileFriendList';
 import { SimpleButton } from '../Btns';
 
+import styles from './Profile.module.scss';
 
 function MyProfile({ profileInfo }) {
 
@@ -42,20 +44,21 @@ function MyProfile({ profileInfo }) {
 
     return (
         <>
-            {inputFieldIsOpen && <InputField closeFunction={setInputFieldIsOpen} msg='введи новый статус' apiUrl='/uploadProfileStatus' previousValue={profileInfo.status} setNewProfileStatus={setProfileStatus} />}
-            {fileLoaderIsOpen && <FileLoader closeFunction={setFileLoaderIsOpen} apiUrl='/uploadAvatar' maxFileSize={4096000} setAvatarUrl={setAvatarUrl} />}
+            {inputFieldIsOpen && <InputField closeFunction={setInputFieldIsOpen} msg='введи новый статус' apiUrl='/api/profile/uploadProfileStatus' previousValue={profileInfo.status} setNewProfileStatus={setProfileStatus} />}
+            {fileLoaderIsOpen && <FileLoader closeFunction={setFileLoaderIsOpen} apiUrl='/api/profile/uploadAvatar' maxFileSize={4096000} setAvatarUrl={setAvatarUrl} />}
             <span className={styles.isOnline}>{profileInfo.isOnline ? 'на зоне' : 'дрыхнет'}</span>
             <p className={styles.registerDate}>{profileInfo.registerDate && 'сидит с ' + profileInfo.registerDate + ' мск'}</p>
             <div className={styles.main}>
                 <div className={styles.mainProfile}>
                     {avatarUrl ?
-                        <img onClick={handleClickAvatar} src={`/profileAvatars/${avatarUrl}`} alt='' />
+                        <img className={styles.avatarImage} onClick={handleClickAvatar} src={`/profileAvatars/${avatarUrl}`} alt='' />
                         :
-                        <img onClick={handleClickAvatar} src={getUrlAvatar()} alt='' />
+                        <img className={styles.avatarImage} onClick={handleClickAvatar} src={getUrlAvatar()} alt='' />
                     }
                     <div>
                         <SimpleButton onClick={handleChangeAvatar} value='изменить фотку' />
                         <SimpleButton onClick={handleChangeStatus} value='изменить статус' />
+                        <ProfileFriendList profileId={profileInfo.id} friends={profileInfo.friends} />
                     </div>
                 </div>
 
@@ -69,13 +72,7 @@ function MyProfile({ profileInfo }) {
                         :
                         <p>{profileInfo.status && profileInfo.status}</p>
                     }
-                    <ul className={styles.friends}>
-                        <li>
-                            <img />
-                        </li>
-                        <li>б</li>
-                        <li>в</li>
-                    </ul>
+                    <Posts posts={[]} />
                 </div>
             </div>
         </>

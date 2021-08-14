@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Redirect } from 'react-router';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import OtherProfile from './OtherProfile';
@@ -13,12 +13,15 @@ function Profile() {
   const ACCESS_TOKEN = useSelector(state => state.auth.ACCESS_TOKEN);
   const USER_ID = useSelector(state => state.auth.USER_ID);
 
-  const [isMyProfile, setIsMyProfile] = React.useState();
+  const [isMyProfile, setIsMyProfile] = React.useState(false);
+  const [wasFetched, setWasFetched] = React.useState(false);
 
   React.useEffect(() => {
-    if (id && ACCESS_TOKEN) {
+    console.log(ACCESS_TOKEN);
+    if (id) {
       (async () => {
-        const res = await axios.post(`/getProfileById/${id}`, { token: ACCESS_TOKEN });
+        const res = await axios.post(`/api/profile/getProfile/${id}`, { token: ACCESS_TOKEN });
+        setWasFetched(true);
         if (res.data.status === 200) {
           setProfileInfo(res.data.info);
           setIsMyProfile(USER_ID === +id);
@@ -27,13 +30,21 @@ function Profile() {
     }
   }, [id, ACCESS_TOKEN]);
 
+  if (+id === 0) { // 0 - unlogged
+    return (<Redirect to='/login' />)
+  }
+
   return (
     <div className='content'>
-      {isMyProfile ?
-        <MyProfile profileInfo={profileInfo} />
-        :
-        <OtherProfile profileInfo={profileInfo} />
-      }
+      {wasFetched
+        && (
+          isMyProfile
+            ?
+            <MyProfile profileInfo={profileInfo} />
+            :
+            <OtherProfile profileInfo={profileInfo} />
+
+        )}
     </div>
   )
 }

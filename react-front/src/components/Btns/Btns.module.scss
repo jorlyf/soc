@@ -26,9 +26,11 @@
   .onHover {
     display: none;
   }
+
   &:hover .onHover {
     display: block;
   }
+
   &:hover .standard {
     display: none;
   }
@@ -50,4 +52,14 @@
     transform: translateY(-1.5px);
     fill     : red;
   }
+}
+
+.attachSvg {
+  cursor: pointer;
+  width : 24px;
+  height: 24px;
+}
+
+.attachBox {
+  display: none;
 }

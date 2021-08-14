@@ -11,7 +11,7 @@ class DbBaseClass:
     def addData(self, data):
         self.db.session.add(data)
 
-    def flush(self):
+    def flushData(self):
         self.db.session.flush()
 
     def commitData(self):

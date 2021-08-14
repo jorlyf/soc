@@ -23,7 +23,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = prepareData();
-    const res = await axios.post('/auth/login', { 'data': data });
+    const res = await axios.post('/api/auth/login', { 'data': data });
     if (res.data.status === 200) {
       localStorage.setItem('accesToken', res.data.token);
       history.push('/');

@@ -26,7 +26,7 @@ function App() {
   React.useEffect(() => {
     (async () => {
       if (tokenFromLS) {
-        const res = await axios.post('/auth/checkMyToken', { 'token': tokenFromLS });
+        const res = await axios.post('/api/auth/checkMyToken', { 'token': tokenFromLS });
         if (res.data.status === 200) {
           dispatch({ type: 'SET_USER_ID', payload: res.data.payload.id });
           dispatch({ type: 'SET_ACCESS_TOKEN', payload: tokenFromLS });
@@ -48,7 +48,6 @@ function App() {
 
       <AppContext.Provider value={{ setUrlContentViewer }} >
         <Header />
-        {USER_ID}
         {notificationIsCalled && <Notification msg={msgNotification} close={setNotificationIsCalled} />}
 
         {urlContentViewer && <ContentViewer url={urlContentViewer} setUrl={setUrlContentViewer} />}

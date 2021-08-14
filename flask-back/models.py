@@ -33,12 +33,16 @@ class Profiles(db.Model):
     __tablename__ = 'profiles'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    avatar_url = db.Column(db.String(128))
+    avatar_url = db.Column(db.String(128), default='default.jpg')
     status = db.Column(db.String(256))
     friends = db.relationship('Friendships',
                               backref='profile',
                               lazy=True,
                               uselist=True)
+    liked_posts = db.relationship('PostLikes',
+                                  backref='profile',
+                                  lazy=True,
+                                  uselist=True)
     register_date = db.Column(db.DateTime, default=getTime())
     last_online = db.Column(db.DateTime, default=getTime())
 
@@ -51,8 +55,8 @@ class Profiles(db.Model):
 
             if not check['status']:  # create new friendship
                 friendship = Friendships(a_id=self.id,
-                                        b_id=friend.id,
-                                        is_accepted=False)
+                                         b_id=friend.id,
+                                         is_accepted=False)
                 db.session.add(friendship)
 
             else:  # friendship exist
@@ -129,3 +133,33 @@ def getFriendStatus(a_id, b_id):
         }
     else:
         return {"status": False}
+
+
+class Posts(db.Model):
+    __tablename__ = 'posts'
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    text = db.Column(db.String(4096))
+    img_urls = db.relationship('PostImages',
+                               backref='post',
+                               lazy=True,
+                               uselist=True)
+    likes = db.relationship('PostLikes',
+                            backref='post',
+                            lazy=True,
+                            uselist=True)
+    like_count = db.Column(db.Integer, default=0)
+
+
+class PostImages(db.Model):
+    __tablename__ = 'post_images'
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    image_url = db.Column(db.String(128))
+
+
+class PostLikes(db.Model):
+    __tablename__ = 'post_likes'
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('profiles.id'))

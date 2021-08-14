@@ -35,7 +35,7 @@ function Register() {
       alert('непрально решил')
     } else {
       const data = prepareData();
-      const res = await axios.post('/auth/register', { 'data': data });
+      const res = await axios.post('/api/auth/register', { 'data': data });
       if (res.data.status === 200) {
         history.push('/login');
       }
@@ -52,7 +52,7 @@ function Register() {
   const [questionAnswer, setQuestionAnswer] = React.useState('');
 
   async function getQuestions() {
-    const res = await axios.get('/auth/getQuestions');
+    const res = await axios.get('/api/auth/getQuestions');
     setQuestions(res.data);
   }
   function changeQuestion() {

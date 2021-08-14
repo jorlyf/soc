@@ -17,7 +17,7 @@ jwtAuth = JwtAuth()
 dbProfile = DbProfile()
 
 
-@profile.route('/getProfileById/<int:id>', methods=['GET', 'POST'])
+@profile.route('/api/profile/getProfile/<int:id>', methods=['GET', 'POST'])
 def getProfileById(id):
     user = dbAuth.getUserById(id)
     req = request.get_json(force=True)
@@ -50,9 +50,9 @@ def getProfileById(id):
             "ourFriendship" : {"requesterId": requesterId, "isAccepted": isAccepted}
         }
         return {"status": 200, "info": info}
-    return {"status": 404}
+    return {"status": 404, "info": "user not found"}
 
-@profile.route('/addFriend/<int:friendId>', methods=['GET', 'POST'])
+@profile.route('/api/profile/addFriend/<int:friendId>', methods=['GET', 'POST'])
 def addFriend(friendId): #updateOnline +
     req = request.get_json(force=True)
     token = req.get('token')
@@ -72,7 +72,7 @@ def addFriend(friendId): #updateOnline +
     else:
         return {'status': 400}
 
-@profile.route('/deleteFriend/<int:friendId>', methods=['GET', 'POST'])
+@profile.route('/api/profile/deleteFriend/<int:friendId>', methods=['GET', 'POST'])
 def deleteFriend(friendId): #updateOnline +
     req = request.get_json(force=True)
     token = req.get('token')
@@ -91,14 +91,23 @@ def deleteFriend(friendId): #updateOnline +
             return {'status': 401}
     else:
         return {'status': 400}
-@profile.route('/getFriends/<int:id>')
+
+@profile.route('/api/profile/getFriends/<int:id>', methods=['GET', 'POST'])
 def getFriends(id):
+    req = request.get_json(force=True)
+    token = req.get('token')
     user = dbAuth.getUserById(id)
-    acceptedFriends = FriendSystem(user).getSerializedAcceptedFriends()
-    return {"status": 200, "acceptedFriends": acceptedFriends}
+    if user:
+        if token:
+            #  return other
+            pass
+        
+        acceptedFriends = FriendSystem(user).getSerializedAcceptedFriends()
+        return {"status": 200, "acceptedFriends": acceptedFriends}
 
+    return {"status": 404}
 
-@profile.route('/uploadAvatar', methods=['GET', 'POST'])
+@profile.route('/api/profile/uploadAvatar', methods=['GET', 'POST'])
 def uploadAvatar(): #update online +
     token = request.form.get('token')
     
@@ -109,8 +118,7 @@ def uploadAvatar(): #update online +
         return {"status": 200, 'avatarUrl': avatar.filename}
     return {"status": 401}
 
-
-@profile.route('/uploadProfileStatus', methods=['GET', 'POST'])
+@profile.route('/api/profile/uploadProfileStatus', methods=['GET', 'POST'])
 def uploadProfileStatus(): #update online +
     req = request.get_json(force=True)
     token = req.get('token')
@@ -122,8 +130,7 @@ def uploadProfileStatus(): #update online +
         return {"status": 200}
     return {"status": 401}
 
-
-@profile.route('/checkFriendStatus/<int:friendId>', methods=['GET', 'POST'])
+@profile.route('/api/profile/checkFriendStatus/<int:friendId>', methods=['GET', 'POST'])
 def checkFriendStatus(friendId): #update online -
     req = request.get_json(force=True)
     token = req.get('token')

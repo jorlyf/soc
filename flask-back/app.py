@@ -5,6 +5,7 @@ from flask_cors import CORS
 #blueprints
 from routes.auth import auth
 from routes.profile import profile
+from routes.posts import posts
 
 
 class App:
@@ -18,6 +19,7 @@ class App:
   def __registerBlueprints(self):
     self.app.register_blueprint(auth)
     self.app.register_blueprint(profile)
+    self.app.register_blueprint(posts)
 
 
   def __createApp(self):

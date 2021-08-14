@@ -11,7 +11,7 @@ function Navigator() {
     { title: 'стенгазета', url: '/' },
     { title: 'моя параша', url: `/profile/${USER_ID}` },
     { title: 'сокамерники', url: `/friends/${USER_ID}` },
-    { title: 'шептунка', url: '/dialog' },
+    { title: 'шептунка', url: '/messages' },
     { title: 'приколюхи', url: '/prikol' },
     { title: 'смена погоняла', url: '/settings' }
   ];
@@ -20,7 +20,7 @@ function Navigator() {
     <div className={styles.nav} >
       {
         navigationList.map(element => (
-          <Link key={element.url} to={element.url}> <p>{element.title}</p> </Link>
+          <Link key={element.title} to={element.url}> <p>{element.title}</p> </Link>
         ))
       }
     </div >

@@ -1,0 +1,37 @@
+.content {
+    background-color: rgba(0, 100, 255, 0.025);
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    height: max-content;
+    width:max-content;
+    .posts {
+        width: 100%;
+        height: auto;
+        margin-top: 100px;
+    }
+    .createPost {
+        min-width: 350px;
+        max-width: 500px;
+        .input {
+            display: block;
+            overflow: hidden;
+            margin: 10px auto;
+            resize: none;
+            border:0px;
+            outline:0px;
+            background-color: transparent;
+            font-size: 14px;
+            padding: 0;
+            width: 80%;
+            min-height: 60px;
+        }
+        .buttons {
+            display: flex;
+            height: 40px;
+            align-items: center;
+            svg {
+                padding-left: 5px;
+            }
+        }
+    }
+}

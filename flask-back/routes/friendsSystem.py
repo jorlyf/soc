@@ -39,6 +39,7 @@ class FriendSystem:
         serialized = []
         for profile in friends:
             j = {}
+            j['id'] = profile.id
             j['login'] = profile.user.login
             j['avatar_url'] = profile.avatar_url
             j['last_online'] = profile.last_online

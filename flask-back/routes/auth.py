@@ -11,7 +11,7 @@ auth = Blueprint('auth', __name__)
 questionList = json.load(
     open(baseDirFlask + '\settings\\regQuestions.json', encoding='utf-8'))
 
-@auth.route('/auth/register', methods=['GET', 'POST'])
+@auth.route('/api/auth/register', methods=['GET', 'POST'])
 def registerUser():
     req = request.get_json(force=True)
     data = req.get('data')
@@ -21,7 +21,7 @@ def registerUser():
 
     return {"status": 400}
 
-@auth.route('/auth/login', methods=['GET', 'POST'])
+@auth.route('/api/auth/login', methods=['GET', 'POST'])
 def loginUser():
     req = request.get_json(force=True)
     data = req.get('data')
@@ -35,11 +35,11 @@ def loginUser():
         }
     return {"status": 400}
 
-@auth.route('/auth/getQuestions', methods=['GET'])
+@auth.route('/api/auth/getQuestions', methods=['GET'])
 def getQuestions():
     return jsonify(questionList)
 
-@auth.route('/auth/checkMyToken', methods=['GET', 'POST'])
+@auth.route('/api/auth/checkMyToken', methods=['GET', 'POST'])
 def checkMyToken():
     req = request.get_json(force=True)
     token = req.get('token')
