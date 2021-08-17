@@ -2,9 +2,9 @@ import React from 'react';
 
 import styles from './Btns.module.scss';
 
-export function ExitBtn({ closeFunction }) {
+export function ExitButton({ closeFunction }) {
 	return (
-		<svg className={styles.exit} onClick={closeFunction} alt='exit' viewBox="0 0 456.339 456.339">
+		<svg className={styles.exitButton} onClick={closeFunction} alt='exit' viewBox="0 0 456.339 456.339">
 			<path d="M227.771,456.337c-38.235,0-76.687-9.533-111.516-29.143c-6.462-3.637-8.753-11.827-5.112-18.289
 		c3.637-6.455,11.82-8.763,18.289-5.112c78.341,44.11,177.506,30.451,241.168-33.2c78.53-78.534,78.53-206.31,0-284.844
 		c-78.534-78.534-206.317-78.54-284.858,0c-78.53,78.534-78.53,206.31,0,284.844c5.245,5.245,5.245,13.75,0,18.995
@@ -15,6 +15,15 @@ export function ExitBtn({ closeFunction }) {
 		C306.35,315.986,302.916,317.293,299.478,317.293z"/>
 			<path d="M156.861,317.293c-3.437,0-6.871-1.308-9.494-3.931c-5.245-5.245-5.245-13.75,0-18.995L289.984,151.75
 		c5.245-5.245,13.743-5.245,18.988,0s5.245,13.75,0,18.995L166.355,313.363C163.732,315.986,160.298,317.293,156.861,317.293z"/>
+		</svg>
+	)
+}
+
+export function CancelButton({ cancelFunction }) {
+	return (
+		<svg className={styles.cancelButton} viewBox="0 0 32 32">
+				<path d="M4,29a1,1,0,0,1-.71-.29,1,1,0,0,1,0-1.42l24-24a1,1,0,1,1,1.42,1.42l-24,24A1,1,0,0,1,4,29Z" />
+				<path d="M28,29a1,1,0,0,1-.71-.29l-24-24A1,1,0,0,1,4.71,3.29l24,24a1,1,0,0,1,0,1.42A1,1,0,0,1,28,29Z" />
 		</svg>
 	)
 }
@@ -34,7 +43,7 @@ export function HoverButton({ value, onClick, textOnHover }) {
 	)
 }
 
-export function SubmitButton({value}) {
+export function SubmitButton({ value }) {
 	return (
 		<button className={styles.SimpleButton} type='submit'>{value}</button>
 	)

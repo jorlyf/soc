@@ -40,7 +40,7 @@
   }
 }
 
-.exit {
+.exitButton {
   cursor      : pointer;
   width       : 32px;
   height      : 32px;
@@ -62,4 +62,17 @@
 
 .attachBox {
   display: none;
+}
+
+.cancelButton {
+  cursor    : pointer;
+  width     : 12px;
+  height    : 12px;
+  transition: 0.1s ease-in-out;
+  fill      : rgba(255, 0, 0, 0.3);
+
+  &:hover {
+    transform: translateY(-1.5px);
+    fill     : rgba(255, 0, 0, 1);
+  }
 }

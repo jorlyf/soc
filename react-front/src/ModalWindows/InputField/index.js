@@ -2,8 +2,9 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
 
-import { ExitBtn } from '../Btns';
 import styles from './InputField.module.scss';
+
+import { ExitButton } from '../../components/Btns';
 
 export default function InputField({ closeFunction, msg, apiUrl, previousValue, setNewProfileStatus }) {
 
@@ -65,7 +66,7 @@ export default function InputField({ closeFunction, msg, apiUrl, previousValue, 
                     :
                     <>
                         {msg && <span>{msg}</span>}
-                        <ExitBtn closeFunction={() => closeFunction(false)} />
+                        <ExitButton closeFunction={() => closeFunction(false)} />
                         <textarea onChange={handleChangeText} value={text} placeholder='не больше 255 буков'></textarea>
                         <button onClick={handleSendStatus}>пойдет</button>
                     </>}

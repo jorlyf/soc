@@ -1,6 +1,6 @@
-import { ExitBtn } from '../Btns';
-
 import styles from './Notification.module.scss';
+
+import { ExitButton } from '../../components/Btns';
 
 function Notification({close, msg}) {
 
@@ -11,7 +11,7 @@ function Notification({close, msg}) {
 	return (
 		<div className={styles.notification}>
 			<span>{msg}</span>
-			<ExitBtn closeFunction={handleClose}/>
+			<ExitButton closeFunction={handleClose}/>
 		</div>
 	)
 }

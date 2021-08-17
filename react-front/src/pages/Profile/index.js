@@ -1,48 +1,52 @@
 import React from 'react';
-import { Redirect } from 'react-router';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams, useHistory } from 'react-router-dom';
+
+import { isMyId } from '../../utilities/checks';
+
 import OtherProfile from './OtherProfile';
 import MyProfile from './MyProfile';
-import { useSelector } from 'react-redux';
 
 function Profile() {
   const { id } = useParams();
-  const [profileInfo, setProfileInfo] = React.useState({});
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const CURRENT_OPENED_PROFILE_DATA = useSelector(state => state.app.CURRENT_OPENED_PROFILE_DATA);
 
   const ACCESS_TOKEN = useSelector(state => state.auth.ACCESS_TOKEN);
   const USER_ID = useSelector(state => state.auth.USER_ID);
 
-  const [isMyProfile, setIsMyProfile] = React.useState(false);
   const [wasFetched, setWasFetched] = React.useState(false);
 
   React.useEffect(() => {
-    console.log(ACCESS_TOKEN);
     if (id) {
       (async () => {
         const res = await axios.post(`/api/profile/getProfile/${id}`, { token: ACCESS_TOKEN });
         setWasFetched(true);
         if (res.data.status === 200) {
-          setProfileInfo(res.data.info);
-          setIsMyProfile(USER_ID === +id);
+          let data = res.data.info;
+          data.isMyProfile = isMyId(USER_ID, id);
+          dispatch({ type: 'SET_CURRENT_OPENED_PROFILE_DATA', payload: data });
         }
       })();
     }
   }, [id, ACCESS_TOKEN]);
 
-  if (+id === 0) { // 0 - unlogged
-    return (<Redirect to='/login' />)
+  if (!USER_ID) { // 0 - unlogged    TODO: transport to Navigator comp
+    history.push('/login');
   }
 
   return (
     <div className='content'>
       {wasFetched
         && (
-          isMyProfile
+          CURRENT_OPENED_PROFILE_DATA.isMyProfile
             ?
-            <MyProfile profileInfo={profileInfo} />
+            <MyProfile />
             :
-            <OtherProfile profileInfo={profileInfo} />
+            <OtherProfile />
 
         )}
     </div>

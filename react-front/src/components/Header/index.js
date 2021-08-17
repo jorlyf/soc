@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
-import Logout from '../Auth/Logout';
+import Logout from '../../pages/Auth/Logout';
 
 import styles from './Header.module.scss';
 

@@ -16,12 +16,13 @@ export function Posts({ posts }) {
 	}
 
 	const handleAttachFiles = () => {
-		setFiles();
+		// suggest types of file
 	}
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		console.log(e);
+		console.log(e.target[0].files);
+		console.log();
 		const data = {files: files, text: text};
 	}
 

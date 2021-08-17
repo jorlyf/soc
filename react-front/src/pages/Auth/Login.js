@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { refreshPage } from '../../scripts';
+import { refreshPage } from '../../utilities/refreshPage';
 
 import styles from './Auth.module.scss';
 import { Link, useHistory, Redirect } from 'react-router-dom';
@@ -23,9 +23,9 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = prepareData();
-    const res = await axios.post('/api/auth/login', { 'data': data });
+    const res = await axios.post('/api/auth/login', { data: data });
     if (res.data.status === 200) {
-      localStorage.setItem('accesToken', res.data.token);
+      localStorage.setItem('ACCESS_TOKEN', res.data.token);
       history.push('/');
       refreshPage();
     } else {

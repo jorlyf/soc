@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import styles from './Friends.module.scss';
 import { Redirect, useParams } from 'react-router-dom';
-import { SimpleButton } from '../Btns/index';
+import { SimpleButton } from '../../components/Btns/index';
 import { useSelector } from 'react-redux';
 
 function Friends() {

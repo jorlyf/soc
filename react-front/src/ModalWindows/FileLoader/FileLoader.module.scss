@@ -1,0 +1,56 @@
+.main {
+    position        : fixed;
+    top             : 0;
+    left            : 0;
+    right           : 0;
+    bottom          : 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index         : 100;
+
+    .uploader {
+        position        : relative;
+        margin          : 10% auto;
+        width           : 500px;
+        height          : auto;
+        background-color: rgb(255, 255, 255);
+        text-align      : center;
+        border-radius   : 5px;
+        border          : 2px solid rgba(0, 0, 0, 0.4);
+
+        .loadImage {
+            display: inline-block;
+            height : 100px;
+            cursor : pointer;
+        }
+
+        input {
+            display: none;
+        }
+
+        .submitButton {
+            display         : block;
+            margin          : 0 auto;
+            border          : 1px solid rgba(0, 0, 0, 0.4);
+            background-color: rgba(255, 255, 255, 0.8);
+            font-family     : inherit;
+            font-size       : 18px;
+            transition      : 0.15s ease-in-out;
+
+            &:hover {
+                background-color: rgba(0, 0, 0, 0.025);
+            }
+        }
+
+        .oneUploadedFileInfo {
+            display     : block;
+            padding-left: 15px;
+            text-align  : left;
+
+            span {
+                margin   : 3px 0;
+                font-size: 14px;
+            }
+
+        }
+    }
+}

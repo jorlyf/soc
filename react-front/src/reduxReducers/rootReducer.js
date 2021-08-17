@@ -1,7 +1,11 @@
 import { combineReducers } from "redux";
 
+import { appReducer } from './appReducer';
 import { authReducer } from "./authReducer";
+import { modalWindowsReducer } from "./modalWindowsReducer";
 
 export const rootReducer = combineReducers({
-    auth: authReducer
+    app: appReducer,
+    auth: authReducer,
+    modalWindows: modalWindowsReducer
 });

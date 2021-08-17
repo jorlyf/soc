@@ -1,9 +1,9 @@
 import React from 'react';
 import axios from 'axios';
 import { useSelector } from 'react-redux';
+import { Link, useHistory, Redirect } from 'react-router-dom';
 
 import styles from './Auth.module.scss';
-import { Link, useHistory, Redirect } from 'react-router-dom';
 
 function Register() {
   const AUTHORIZE_STATUS = useSelector((state) => state.auth.AUTHORIZE_STATUS);
@@ -35,7 +35,7 @@ function Register() {
       alert('непрально решил')
     } else {
       const data = prepareData();
-      const res = await axios.post('/api/auth/register', { 'data': data });
+      const res = await axios.post('/api/auth/register', { data: data });
       if (res.data.status === 200) {
         history.push('/login');
       }
@@ -47,8 +47,8 @@ function Register() {
   const [loginInput, setLoginInput] = React.useState('');
   const [passwordInput, setPasswordInput] = React.useState('');
   const [questionInput, setQuestionInput] = React.useState('');
-  const [question, setQuestion] = React.useState('');
   const [questions, setQuestions] = React.useState('');
+  const [question, setQuestion] = React.useState('');
   const [questionAnswer, setQuestionAnswer] = React.useState('');
 
   async function getQuestions() {
@@ -68,7 +68,6 @@ function Register() {
 
   React.useEffect(() => {
     if (!questions) {
-      console.log(questions);
       getQuestions();
     }
   }, []);
