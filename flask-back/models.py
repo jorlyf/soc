@@ -33,8 +33,8 @@ class Profiles(db.Model):
     __tablename__ = 'profiles'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    avatar_url = db.Column(db.String(128), default='default.jpg')
-    status = db.Column(db.String(256))
+    _avatar_url = db.Column(db.String(128))
+    status = db.Column(db.String(128))
     friends = db.relationship('Friendships',
                               backref='profile',
                               lazy=True,
@@ -48,6 +48,12 @@ class Profiles(db.Model):
 
     def __repr__(self):
         return f'<Profile/ {self.user.login}>'
+
+    @property
+    def avatar_url(self):
+        if self._avatar_url is None:
+            return 'default.jpg'
+        return self._avatar_url
 
     def addFriendship(self, friend):
         try:
@@ -96,12 +102,12 @@ class Profiles(db.Model):
         return {
             "id": self.id,
             "login": self.user.login,
-            "avatarUrl": self.avatar_url,
+            "avatarUrl": self._avatar_url,
             "lastOnline": self.last_online
         }
 
     def updateAvatar(self, avatarUrl):
-        self.avatar_url = avatarUrl
+        self._avatar_url = avatarUrl
         db.session.commit()
 
     def updateStatus(self, status):
@@ -140,7 +146,7 @@ class Posts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     text = db.Column(db.String(4096))
-    img_urls = db.relationship('PostImages',
+    images = db.relationship('PostImages',
                                backref='post',
                                lazy=True,
                                uselist=True)
@@ -149,6 +155,10 @@ class Posts(db.Model):
                             lazy=True,
                             uselist=True)
     like_count = db.Column(db.Integer, default=0)
+    comments = db.relationship('PostComments',
+                            backref='post',
+                            lazy=True,
+                            uselist=True)
 
 
 class PostImages(db.Model):
@@ -163,3 +173,22 @@ class PostLikes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('profiles.id'))
+
+
+class PostComments(db.Model):
+    __tablename__ = 'post_comments'
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('profiles.id'))
+    text = db.Column(db.String(512))
+    images = db.relationship('CommentImages',
+                               backref='comment',
+                               lazy=True,
+                               uselist=True)
+
+
+class CommentImages(db.Model):
+    __tablename__ = 'comment_images'
+    id = db.Column(db.Integer, primary_key=True)
+    comment_id = db.Column(db.Integer, db.ForeignKey('post_comments.id'))
+    image_url = db.Column(db.String(128))

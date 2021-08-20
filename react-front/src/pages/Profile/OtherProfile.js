@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
 import styles from './Profile.module.scss';
-import { SimpleButton, HoverButton } from '../../components/Btns';
+import { SimpleButton, HoverButton, MenuButton } from '../../components/Btns';
 import { ProfileFriendList } from './ProfileFriendList';
 import { useSelector } from 'react-redux';
 
@@ -16,37 +16,81 @@ function OtherProfile() {
 	const AUTHORIZE_STATUS = useSelector(state => state.auth.AUTHORIZE_STATUS);
 	const USER_ID = useSelector(state => state.auth.USER_ID);
 
-	function getAddFriendBtn() {
+	const getFriendButton = () => {
 		if (AUTHORIZE_STATUS && CURRENT_OPENED_PROFILE_DATA.ourFriendship) {
-			if (CURRENT_OPENED_PROFILE_DATA.ourFriendship.isAccepted) {
-				return <HoverButton value='мой кореш' onClick={handleButtonFriend} textOnHover='больш не кореш' />
-			} else if (CURRENT_OPENED_PROFILE_DATA.ourFriendship.requesterId === USER_ID) {
-				return <HoverButton value='жду ответ' onClick={handleButtonFriend} textOnHover='пошел нахуй' />
-			} else if ((CURRENT_OPENED_PROFILE_DATA.ourFriendship.requesterId === CURRENT_OPENED_PROFILE_DATA.id)) {
-				return <SimpleButton value='предлагает стать корешами' onClick={handleButtonFriend} />
-			} else {
-				return <SimpleButton value='предложить стать корешами' onClick={handleButtonFriend} />
+			const friendship = CURRENT_OPENED_PROFILE_DATA.ourFriendship;
+			switch (true) {
+				case (friendship.isAccepted): // friends
+					return (
+						<HoverButton
+							value='мы кореша'
+							valueOnHover='больш не кореш'
+							onClick={() => handleFriendButton('deleteFriendship')}
+						/>
+					);
+				case (!friendship.requesterId): // not friends
+					return (
+						<SimpleButton
+							value='предложить стать корешами'
+							onClick={() => handleFriendButton('requestFriendship')}
+						/>
+					);
+				case (friendship.requesterId === USER_ID):
+					return (
+						<HoverButton
+							value='предложение отправлено'
+							valueOnHover='отменить'
+							onClick={() => handleFriendButton('cancelFriendship')}
+						/>
+					);
+				case (friendship.requesterId === CURRENT_OPENED_PROFILE_DATA.id):
+					return (
+						<MenuButton
+							menuButtonValue='предлагает стать корешами'
+							menuCells={[
+								{ value: 'согласиться', onClick: () => handleFriendButton('acceptFriendship') },
+								{ value: 'отказаться', onClick: () => handleFriendButton('cancelFriendship') }
+							]}
+						/>
+					);
+
 			}
 		}
 	}
 
-	const handleButtonFriend = async () => {
-		console.log(CURRENT_OPENED_PROFILE_DATA.ourFriendship);
-		if (AUTHORIZE_STATUS && CURRENT_OPENED_PROFILE_DATA.ourFriendship) {
-			if (CURRENT_OPENED_PROFILE_DATA.ourFriendship.isAccepted) {
-				const res = await axios.post(`/api/profile/deleteFriend/${CURRENT_OPENED_PROFILE_DATA.id}`, { token: ACCESS_TOKEN });
-				if (res.data.status === 200) {
-					alert('удалил')
-				}
-			}
-			else if (!CURRENT_OPENED_PROFILE_DATA.ourFriendship.isAccepted) {
+	const handleFriendButton = async (action) => {
+		switch (action) {
+			case 'requestFriendship': {
 				const res = await axios.post(`/api/profile/addFriend/${CURRENT_OPENED_PROFILE_DATA.id}`, { token: ACCESS_TOKEN });
 				if (res.data.status === 200) {
-					alert('заявка отправлена')
+					dispatch({ type: 'SET_CURRENT_OPENED_PROFILE_DATA_OUR_FRIENDSHIP', payload: { isAccepted: false, requesterId: USER_ID } });
 				}
+				break;
+			}
+			case 'deleteFriendship': {
+				const res = await axios.post(`/api/profile/deleteFriend/${CURRENT_OPENED_PROFILE_DATA.id}`, { token: ACCESS_TOKEN });
+				if (res.data.status === 200) {
+					dispatch({ type: 'SET_CURRENT_OPENED_PROFILE_DATA_OUR_FRIENDSHIP', payload: { isAccepted: false, requesterId: 0 } });
+				};
+				break;
+			}
+			case 'acceptFriendship': {
+				const res = await axios.post(`/api/profile/addFriend/${CURRENT_OPENED_PROFILE_DATA.id}`, { token: ACCESS_TOKEN });
+				if (res.data.status === 200) {
+					dispatch({ type: 'SET_CURRENT_OPENED_PROFILE_DATA_OUR_FRIENDSHIP', payload: { isAccepted: true, requesterId: CURRENT_OPENED_PROFILE_DATA.id } });
+				}
+				break;
+			}
+			case 'cancelFriendship': {
+				const res = await axios.post(`/api/profile/deleteFriend/${CURRENT_OPENED_PROFILE_DATA.id}`, { token: ACCESS_TOKEN });
+				if (res.data.status === 200) {
+					dispatch({ type: 'SET_CURRENT_OPENED_PROFILE_DATA_OUR_FRIENDSHIP', payload: { isAccepted: false, requesterId: 0 } });
+				};
+				break;
 			}
 		}
 	}
+
 	const handleClickAvatar = () => {
 		dispatch({ type: 'SET_CONTENT_VIEWER_DATA', payload: { isVisible: true, url: getUrlAvatar(), type: 'image' } });
 	}
@@ -68,7 +112,7 @@ function OtherProfile() {
 								{AUTHORIZE_STATUS &&
 									<>
 										<SimpleButton onClick={''} value='шептануть' />
-										{getAddFriendBtn()}
+										{getFriendButton()}
 									</>
 								}
 								<ProfileFriendList profileId={CURRENT_OPENED_PROFILE_DATA.id} friends={CURRENT_OPENED_PROFILE_DATA.friends} />

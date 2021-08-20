@@ -18,7 +18,7 @@ ReactDOM.render(
       <App />
       <ModalWindows />
     </Provider>
-  </BrowserRouter>, // try modalWindows here
-  document.getElementById('root')
+  </BrowserRouter>
+  , document.getElementById('root')
 );
 

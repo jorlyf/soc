@@ -18,7 +18,7 @@ dbProfile = DbProfile()
 
 
 @profile.route('/api/profile/getProfile/<int:id>', methods=['GET', 'POST'])
-def getProfileById(id):
+def getProfile(id):
     user = dbAuth.getUserById(id)
     req = request.get_json(force=True)
     token = req.get('token')
@@ -113,7 +113,8 @@ def uploadAvatar(): #update online +
     
     encoded = tokenRequired(token)
     if encoded['status'] == True:
-        avatar = request.files.get('file')
+        files = request.files.getlist('files')
+        avatar = files[0]
         dbProfile.updateProfileAvatar(avatar, encoded['id'])
         return {"status": 200, 'avatarUrl': avatar.filename}
     return {"status": 401}
@@ -129,13 +130,3 @@ def uploadProfileStatus(): #update online +
         dbProfile.updateProfileStatus(status, encoded['id'])
         return {"status": 200}
     return {"status": 401}
-
-@profile.route('/api/profile/checkFriendStatus/<int:friendId>', methods=['GET', 'POST'])
-def checkFriendStatus(friendId): #update online -
-    req = request.get_json(force=True)
-    token = req.get('token')
-    encoded = tokenRequired(token)
-    if encoded['status'] == True:
-        return {"status": 200, "isFriend": dbProfile.checkIsFriend(encoded['id'], friendId)}
-    return {"status": 401}
-

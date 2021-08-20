@@ -1,13 +1,13 @@
 import React from 'react';
 import axios from 'axios';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useHistory, Redirect } from 'react-router-dom';
 
 import styles from './Auth.module.scss';
 
 function Register() {
   const AUTHORIZE_STATUS = useSelector((state) => state.auth.AUTHORIZE_STATUS);
-
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const onChangeLoginInput = (e) => {
@@ -30,17 +30,21 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (questionInput === '') {
-      alert('ты сначала реши вопрос епта')
+      dispatch({ type: 'SET_NEW_NOTIFICATION_DATA', payload: { message: 'ты сначала на вопрос ответь епта' } });
     } else if (!checkQuestionAnswer()) {
-      alert('непрально решил')
+      dispatch({ type: 'SET_NEW_NOTIFICATION_DATA', payload: { message: 'непрально решил' } });
     } else {
       const data = prepareData();
-      const res = await axios.post('/api/auth/register', { data: data });
-      if (res.data.status === 200) {
-        history.push('/login');
-      }
-      else {
-        alert('чет не так')
+      try {
+        const res = await axios.post('/api/auth/register', { data: data });
+        if (res.data.status === 200) {
+          history.push('/login');
+        } else {
+          dispatch({ type: 'SET_NEW_NOTIFICATION_DATA', payload: { message: 'чет не вышло впарашиться тебе' } });
+        }
+      } catch (error) {
+        console.error(error);
+        dispatch({ type: 'SET_NEW_NOTIFICATION_DATA', payload: { message: 'чет ошибку выдало на серваке' } });
       }
     }
   };

@@ -5,6 +5,7 @@ import axios from 'axios';
 import TextareaAutosize from 'react-textarea-autosize';
 import { SubmitButton, AttachButton } from '../Btns';
 import styles from './Post.module.scss';
+import { InputField } from '../InputField';
 
 export function Posts({ posts }) {
 
@@ -23,7 +24,7 @@ export function Posts({ posts }) {
 		e.preventDefault();
 		console.log(e.target[0].files);
 		console.log();
-		const data = {files: files, text: text};
+		const data = { files: files, text: text };
 	}
 
 	const sendPostData = async (data) => {
@@ -34,8 +35,11 @@ export function Posts({ posts }) {
 		<div className={styles.content}>
 			<div className={styles.createPost}>
 				<TextareaAutosize className={styles.input} onChange={handleChangeText} value={text} placeholder='вводи че нить' />
+				{/* <InputField
+					placeholder='вводи че нить'
+				/> */}
 				<form className={styles.buttons} onSubmit={handleSubmit}>
-					<AttachButton onClick={handleAttachFiles}/>
+					<AttachButton onClick={handleAttachFiles} />
 					<SubmitButton value='заебенить' />
 				</form>
 			</div>

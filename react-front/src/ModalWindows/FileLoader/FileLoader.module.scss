@@ -11,12 +11,16 @@
         position        : relative;
         margin          : 10% auto;
         width           : 500px;
-        height          : auto;
         background-color: rgb(255, 255, 255);
         text-align      : center;
         border-radius   : 5px;
         border          : 2px solid rgba(0, 0, 0, 0.4);
-
+        .message {
+            display: inline-block;
+            width: 100%;
+            font-size: 20px;
+            padding-top: 5px;
+        }
         .loadImage {
             display: inline-block;
             height : 100px;
@@ -41,16 +45,19 @@
             }
         }
 
-        .oneUploadedFileInfo {
-            display     : block;
-            padding-left: 15px;
-            text-align  : left;
+        .uploadedFilesInfo {
+            padding: 5px 15px;
 
-            span {
-                margin   : 3px 0;
-                font-size: 14px;
+            .oneUploadedFileInfo {
+                display   : block;
+                text-align: left;
+
+                span {
+                    margin   : 3px 0;
+                    font-size: 14px;
+                }
+
             }
-
         }
     }
 }

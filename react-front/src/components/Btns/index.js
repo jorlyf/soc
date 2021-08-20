@@ -19,11 +19,11 @@ export function ExitButton({ closeFunction }) {
 	)
 }
 
-export function CancelButton({ cancelFunction }) {
+export function CancelButton({ onClick }) {
 	return (
-		<svg className={styles.cancelButton} viewBox="0 0 32 32">
-				<path d="M4,29a1,1,0,0,1-.71-.29,1,1,0,0,1,0-1.42l24-24a1,1,0,1,1,1.42,1.42l-24,24A1,1,0,0,1,4,29Z" />
-				<path d="M28,29a1,1,0,0,1-.71-.29l-24-24A1,1,0,0,1,4.71,3.29l24,24a1,1,0,0,1,0,1.42A1,1,0,0,1,28,29Z" />
+		<svg className={styles.cancelButton} onClick={onClick} viewBox="0 0 32 32">
+			<path d="M4,29a1,1,0,0,1-.71-.29,1,1,0,0,1,0-1.42l24-24a1,1,0,1,1,1.42,1.42l-24,24A1,1,0,0,1,4,29Z" />
+			<path d="M28,29a1,1,0,0,1-.71-.29l-24-24A1,1,0,0,1,4.71,3.29l24,24a1,1,0,0,1,0,1.42A1,1,0,0,1,28,29Z" />
 		</svg>
 	)
 }
@@ -34,12 +34,40 @@ export function SimpleButton({ value, onClick }) {
 	)
 }
 
-export function HoverButton({ value, onClick, textOnHover }) {
+export function HoverButton({ value, onClick, valueOnHover }) {
 	return (
 		<button className={styles.FriendButton} onClick={onClick} >
 			<span className={styles.standard}>{value}</span>
-			<span className={styles.onHover}>{textOnHover}</span>
+			<span className={styles.onHover}>{valueOnHover}</span>
 		</button>
+	)
+}
+
+export function MenuButton({ menuButtonValue, menuCells = [] }) {
+
+	const [opened, setOpened] = React.useState(false);
+
+	const handleClickMenu = () => {
+		setOpened(!opened);
+	}
+	const handleCloseMenu = () => {
+		setOpened(false);
+	}
+	const handleClickCell = (cell) => {
+		cell.onClick();
+		handleCloseMenu();
+	}
+	return (
+		<div className={styles.Menu}>
+			<button className={styles.MenuButton} onClick={handleClickMenu} ><span>{menuButtonValue}</span></button>
+			{opened &&
+				<ul className={styles.MenuContent}>
+					{menuCells.map(cell => (
+						<li onClick={() => handleClickCell(cell)}><span>{cell.value}</span></li>
+					))}
+				</ul>
+			}
+		</div>
 	)
 }
 

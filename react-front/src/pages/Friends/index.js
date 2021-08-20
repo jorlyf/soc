@@ -11,6 +11,7 @@ function Friends() {
   const [acceptedFriends, setAcceptedFriends] = React.useState([]);
   const [wasFetched, setWasFetched] = React.useState(false);
   const ACCESS_TOKEN = useSelector(state => state.auth.ACCESS_TOKEN);
+  const USER_ID = useSelector(state => state.auth.USER_ID);
 
   React.useEffect(() => {
     if (id) {
@@ -52,7 +53,11 @@ function Friends() {
 
               </div>
             )) :
-            <p className={styles.notFriends}>че петух друзей нет?</p>}
+            USER_ID === +id ?
+              <p className={styles.notFriends}>че петух братанов нет?</p>
+              :
+              <p className={styles.notFriends}>у этого петуха нет братанов</p>
+          }
         </div>}
     </div>
   )

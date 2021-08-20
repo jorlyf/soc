@@ -17,7 +17,7 @@ export default function FileLoader({ data }) {
 		document.addEventListener('click', (e) => handleOutsideClick(e));
 	}, [])
 
-	function checkFilesSize(files) {
+	const checkFilesSize = (files) => {
 		for (const file of files) {
 			if (file.size >= data.maxFilesize)
 				return false;
@@ -25,36 +25,45 @@ export default function FileLoader({ data }) {
 		return true;
 	}
 
-	async function sendFiles(files) {
+	const sendFiles = async (files) => {
 		const formData = new FormData();
 		for (const file of files) {
 			formData.append('files', file);
 		};
 		formData.set('token', ACCESS_TOKEN);
-		const res = await axios.post(data.apiUrl, formData);
-		if (res.data.status === 200) {
-			//dispatch({ type: 'SET_CURRENT_OPENED_PROFILE_DATA_AVATAR_URL', payload: res.data.avatarUrl });
+		try {
+			const res = await axios.post(data.apiUrl, formData);
+			if (res.data.status === 200) {
+				switch (true) {
+					case data.apiUrl === '/api/profile/uploadAvatar':
+						dispatch({ type: 'SET_CURRENT_OPENED_PROFILE_DATA_AVATAR_URL', payload: res.data.avatarUrl });
+						break;
+				}
+			} else {
+				dispatch({ type: 'SET_NEW_NOTIFICATION_DATA', payload: { message: 'не отправилось оно не знаю че такое' } });
+			}
 			handleClose();
-		} else {
-			// set error notification
+		} catch (error) {
+			console.error(error);
+			dispatch({ type: 'SET_NEW_NOTIFICATION_DATA', payload: { message: 'ошибка сервека' } });
 		}
 	}
 
 	const handleSubmit = () => {
 		const files = data.files;
-		if (!files) {
-			alert('файл выбери'); // set notification
+		if (files.length === 0) {
+			dispatch({ type: 'SET_NEW_NOTIFICATION_DATA', payload: { message: 'файл то выбери' } });
 		} else if (files.length > data.maxFilesCount) {
-			alert('не более XX файлов');
+			dispatch({ type: 'SET_NEW_NOTIFICATION_DATA', payload: { message: `незя больше ${data.maxFilesCount} файлов сюда грузить` } });
 		} else if (!checkFilesSize(files)) {
-			alert('файл большой какой-то');
+			dispatch({ type: 'SET_NEW_NOTIFICATION_DATA', payload: { message: 'какойт из файлов слишком большой' } });
 		} else {
 			sendFiles(files);
 		}
 	}
 
 	const handleChangeInputFiles = (e) => {
-		dispatch({ type: 'SET_FILE_LOADER_DATA_FILES', payload: e.target.files });
+		dispatch({ type: 'SET_FILE_LOADER_DATA_FILES', payload: [...data.files, ...e.target.files] });
 	}
 
 	const handleClick = () => {
@@ -64,33 +73,33 @@ export default function FileLoader({ data }) {
 	const overlay = React.createRef(null);
 
 	const handleOutsideClick = (e) => {
-		if (e.target === overlay.current) {
+		if (e.target === overlay.current)
 			handleClose();
-		}
 	}
 
 	const handleClose = () => {
 		dispatch({ type: 'SET_FILE_LOADER_DATA', payload: {} });
 	}
 
-	function getAcceptTypesFile() {
-		if (data.filetype === 'image') {
-			return '.png, .jpg, .jpeg'
+	const getAcceptedFileTypes = () => {
+		switch (data.filetype) {
+			case ('image'):
+				return '.png, .jpg, .jpeg'
 		}
 	}
 
 	return (
 		<div ref={overlay} className={styles.main}>
 			<div className={styles.uploader}>
-
-				<img className={styles.loadImage} onClick={handleClick} src='/load.png' />
 				<ExitButton closeFunction={handleClose} />
+				<span className={styles.message}>{data.message}</span>
+				<img className={styles.loadImage} onClick={handleClick} src='/load.png' />
 				<input
 					onChange={handleChangeInputFiles}
-					ref={inputFile}
 					type='file'
-					accept={getAcceptTypesFile()}
+					accept={getAcceptedFileTypes()}
 					multiple={data.isMultiple}
+					ref={inputFile}
 				/>
 				<button className={styles.submitButton} onClick={handleSubmit}>грузи</button>
 				<LoadedFiles files={data.files} />

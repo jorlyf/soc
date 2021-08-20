@@ -2,13 +2,18 @@ import os
 from os import urandom
 from settings.baseDir import baseDirProject
 
-def generateHash():
-    return urandom(48).hex()
+from time import time
 
-def saveFile(file, path):
-    file.save(os.path.join(f'{baseDirProject}{path}{file.filename}'))
+def generateHash():
+    return urandom(32).hex()
+
+def saveImage(image, path):
+    filename = image.filename
+    image.save(os.path.join(f'{baseDirProject}{path}{filename}'))
 
 def deleteAvatar(previousAvatar):
-    PATH_TO_AVATARS_FOLDER = '\\react-front\\public\\profileAvatars\\'
-    if os.path.isfile(os.path.join(f'{baseDirProject}{PATH_TO_AVATARS_FOLDER}{previousAvatar}')):
-        os.remove(os.path.join(f'{baseDirProject}{PATH_TO_AVATARS_FOLDER}{previousAvatar}'))
+    if previousAvatar != 'default.jpg': # чтоб дефолтный не удалял а то офигел
+        PATH_TO_AVATARS_FOLDER = '\\react-front\\public\\profileAvatars\\'
+        PATH = os.path.join(f'{baseDirProject}{PATH_TO_AVATARS_FOLDER}{previousAvatar}')
+        if os.path.isfile(PATH):
+            os.remove(PATH)

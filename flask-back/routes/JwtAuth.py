@@ -19,5 +19,5 @@ class JwtAuth:
                 return {'status': 400, 'payload': 'token is timeout'}
             return {'status': 200, 'payload': decodeToken}
         except:
-            return {'status': 400, 'payload': 'token is invalid'}
+            return {'status': 401, 'payload': 'token is invalid'}
 

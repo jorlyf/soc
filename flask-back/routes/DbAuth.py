@@ -12,7 +12,7 @@ class DbAuth(DbBaseClass):
 
         try:
             self.addData(newUser)
-            self.flush()
+            self.flushData()
             newProfile = Profiles(user_id=newUser.id)
             self.addData(newProfile)
             self.commitData()

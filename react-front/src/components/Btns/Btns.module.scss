@@ -8,6 +8,11 @@
   height          : 30px;
   cursor          : pointer;
 
+  span {
+    font-family: Helvetica;
+    font-size  : 14px;
+  }
+
   &:hover {
     background-color: rgba(65, 105, 225, 0.2);
   }
@@ -22,6 +27,11 @@
   width           : 85%;
   height          : 30px;
   cursor          : pointer;
+
+  span {
+    font-family: Helvetica;
+    font-size  : 14px;
+  }
 
   .onHover {
     display: none;
@@ -41,12 +51,16 @@
 }
 
 .exitButton {
+  position    : absolute;
+  top         : 10px;
+  left        : auto;
+  right       : 10px;
   cursor      : pointer;
   width       : 32px;
   height      : 32px;
   padding-left: 8px;
   transition  : 0.1s ease-in-out;
-  fill        : white;
+  fill        : black;
 
   &:hover {
     transform: translateY(-1.5px);
@@ -69,10 +83,66 @@
   width     : 12px;
   height    : 12px;
   transition: 0.1s ease-in-out;
-  fill      : rgba(255, 0, 0, 0.3);
+  fill      : rgba(255, 0, 0, 0.5);
 
   &:hover {
     transform: translateY(-1.5px);
     fill     : rgba(255, 0, 0, 1);
+  }
+}
+
+.Menu {
+  position: relative;
+
+  .MenuButton {
+    display         : block;
+    margin          : 10px auto;
+    background-color: rgba(65, 105, 225, 0.15);
+    border          : 2px solid rgba(0, 0, 0, 0.1);
+    border-radius   : 8px;
+    width           : 85%;
+    height          : 30px;
+    cursor          : pointer;
+
+    span {
+      font-family: Helvetica;
+      font-size  : 14px;
+    }
+
+    &:hover {
+      background-color: rgba(65, 105, 225, 0.2);
+    }
+  }
+
+  .MenuContent {
+    position  : absolute;
+    z-index   : 10;
+    list-style: none;
+    width     : 100%;
+    height    : auto;
+    padding   : 0;
+    top       : 12px;
+    text-align: center;
+
+    li {
+      display: block;
+      margin : 2px auto;
+      width  : 80%;
+      height : 30px;
+
+      background-color: rgb(247, 246, 255);
+      border          : 2px solid rgba(0, 0, 0, 0.1);
+      border-radius   : 8px;
+      cursor          : pointer;
+
+      &:hover {
+        background-color: rgb(186, 227, 240);
+      }
+
+      span {
+        font-family: Helvetica;
+        font-size  : 14px;
+      }
+    }
   }
 }

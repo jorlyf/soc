@@ -1,14 +1,14 @@
 import React from 'react';
 import axios from 'axios';
 import { refreshPage } from '../../utilities/refreshPage';
+import { useSelector, useDispatch } from 'react-redux';
+import { Link, useHistory, Redirect } from 'react-router-dom';
 
 import styles from './Auth.module.scss';
-import { Link, useHistory, Redirect } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
 function Login() {
   const AUTHORIZE_STATUS = useSelector(state => state.auth.AUTHORIZE_STATUS)
-
+  const dispatch = useDispatch();
   const history = useHistory();
 
   const onChangeLogin = (e) => {
@@ -23,13 +23,18 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = prepareData();
-    const res = await axios.post('/api/auth/login', { data: data });
-    if (res.data.status === 200) {
-      localStorage.setItem('ACCESS_TOKEN', res.data.token);
-      history.push('/');
-      refreshPage();
-    } else {
-      alert('чет не вышло')
+    try {
+      const res = await axios.post('/api/auth/login', { data: data });
+      if (res.data.status === 200) {
+        localStorage.setItem('ACCESS_TOKEN', res.data.token);
+        history.push('/');
+        refreshPage();
+      } else {
+        dispatch({ type: 'SET_NEW_NOTIFICATION_DATA', payload: { message: 'чет не вышло впарашиться тебе' } });
+      }
+    } catch (error) {
+      console.error(error);
+      dispatch({ type: 'SET_NEW_NOTIFICATION_DATA', payload: { message: 'чет ошибку выдало на серваке' } });
     }
   }
   const [login, setLogin] = React.useState('');

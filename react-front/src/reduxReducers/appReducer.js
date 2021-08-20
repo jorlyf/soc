@@ -6,6 +6,7 @@ const defaultState = {
 const SET_IS_LOADED = 'SET_IS_LOADED';
 const SET_CURRENT_OPENED_PROFILE_DATA = 'SET_CURRENT_OPENED_PROFILE_DATA';
 const SET_CURRENT_OPENED_PROFILE_DATA_AVATAR_URL = 'SET_CURRENT_OPENED_PROFILE_DATA_AVATAR_URL';
+const SET_CURRENT_OPENED_PROFILE_DATA_OUR_FRIENDSHIP = 'SET_CURRENT_OPENED_PROFILE_DATA_OUR_FRIENDSHIP';
 
 export function appReducer(state = defaultState, action) {
   switch (action.type) {
@@ -19,6 +20,14 @@ export function appReducer(state = defaultState, action) {
         CURRENT_OPENED_PROFILE_DATA: {
           ...state.CURRENT_OPENED_PROFILE_DATA,
           avatarUrl: action.payload
+        }
+      };
+    case SET_CURRENT_OPENED_PROFILE_DATA_OUR_FRIENDSHIP:
+      return {
+        ...state,
+        CURRENT_OPENED_PROFILE_DATA: {
+          ...state.CURRENT_OPENED_PROFILE_DATA,
+          ourFriendship: action.payload
         }
       };
 

@@ -1,90 +1,110 @@
 .isOnline {
-  position: absolute;
-  display: block;
-  width: max-content;
-  margin: 10px 120px;
+  position : absolute;
+  display  : block;
+  width    : max-content;
+  margin   : 10px 120px;
   font-size: 24px;
 }
+
 .registerDate {
-  display: block;
-  width: max-content;
-  margin: 10px 100px;
+  display    : block;
+  width      : max-content;
+  margin     : 10px 100px;
   margin-left: auto;
-  font-size: 14px;
+  font-size  : 14px;
 }
+
 .main {
   display: flex;
-  margin: 40px;
+  margin : 40px;
 }
+
 .mainProfile {
-  display: flex;
-  flex-direction: column;
-  width: max-content;
-  height: max-content;
-  border-radius: 5px;
-  border: 2px solid rgba(0, 0, 0, 0.025);
+  display         : flex;
+  flex-direction  : column;
+  width           : max-content;
+  height          : max-content;
+  border-radius   : 5px;
+  border          : 2px solid rgba(0, 0, 0, 0.025);
   background-color: rgba(0, 100, 255, 0.02);
 
   .avatarImage {
-    margin: 0 auto;
-    min-width: 200px;
-    max-width: 350px;
-    max-height: 400px;
-    cursor: pointer;
-    border: 2px solid rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    overflow: hidden;
-    object-fit: contain;
+    margin          : 0 auto;
+    background-color: rgb(255, 255, 255);
+    min-width       : 200px;
+    max-width       : 350px;
+    max-height      : 400px;
+    cursor          : pointer;
+    border          : 2px solid rgba(0, 0, 0, 0.1);
+    border-radius   : 5px;
+    overflow        : hidden;
+    object-fit      : contain;
   }
+
   div {
     align-self: center;
-    margin: 0;
-    font-size: 18px;
+    margin    : 0;
+    font-size : 18px;
   }
 }
+
 .info {
   margin-right: 40px;
-  margin-left: 10%;
-  width: 100%;
+  margin-left : 10%;
+  width       : 100%;
+
   .login {
     font-weight: bold;
-    font-size: 28px;
+    font-size  : 28px;
   }
+
+  .status {
+    display: inline-block;
+    width: 100%;
+    padding: 8px 0;
+  }
+
   p {
     margin: 0;
   }
 }
+
 .notFound {
-  display: block;
-  width: max-content;
-  margin: 20px auto;
+  display  : block;
+  width    : max-content;
+  margin   : 20px auto;
   font-size: 40px;
 }
+
 .friendList {
-  width: 328px;
-  height: auto;
+  width           : 328px;
+  height          : auto;
   background-color: rgba(140, 100, 145, 0.025);
-  list-style: none;
-  margin: 0;
-  margin-top: 10px;
-  padding: 0;
-  border: 2px solid rgba(0, 0, 0, 0.025);
+  list-style      : none;
+  margin          : 0;
+  margin-top      : 10px;
+  padding         : 0;
+  border          : 2px solid rgba(0, 0, 0, 0.025);
+
   span {
-    display: block;
-    font-size: 24px;
+    display   : block;
+    font-size : 24px;
     text-align: center;
   }
+
   li {
-    display: inline-block;
-    width: 100px;
-    height: 110px;
-    padding: 4px;
+    display   : inline-block;
+    width     : 100px;
+    height    : 110px;
+    padding   : 4px;
     text-align: center;
-    font-size: 18px;
+    font-size : 18px;
+
     img {
-      max-width: 100px;
-      max-height: 100px;
-      border: 2px solid rgba(0, 0, 0, 0.1);
+      background-color: rgb(255, 255, 255);
+      max-width       : 100px;
+      max-height      : 100px;
+      border          : 2px solid rgba(0, 0, 0, 0.1);
     }
   }
 }
