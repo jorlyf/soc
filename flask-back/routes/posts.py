@@ -10,20 +10,30 @@ jwtAuth = JwtAuth()
 dbAuth = DbAuth()
 dbPost = DbPost()
 
+
+@posts.route('/api/posts/getUserPosts', methods=['GET'])
+def getPosts():
+    posts = dbPost.getUserPosts()
+    return {"status": 200, "posts": posts}
+
+
 @posts.route('/api/posts/createPost', methods=['GET', 'POST'])
 def createPost():
-    req = request.get_json(force=True)
-    token = req.get('token')
-    postData = req.get('data')
-    print(postData)
+    token = request.form.get('token')
+    text = request.form.get('text')
+    files = request.files.getlist('files')
     if token:
         encoded = tokenRequired(token)
-        if encoded['status'] == True:
+        if encoded['status']:
             data = {}
-            userId = encoded['id']
-            data['id'] = userId
-
+            data['authorId'] = encoded['id']
+            data['text'] = text
+            data['files'] = files
+            post = dbPost.createPost(data)
+            status = post["status"]
             
+            return {"status": status}
+
         else:
             return {"status": 401}
     return {"status": 401}

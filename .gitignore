@@ -8,3 +8,5 @@ logs
 **/*.backup.*
 **/*.back.*
 *.db
+
+*/public/postImages

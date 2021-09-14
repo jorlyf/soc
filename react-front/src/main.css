@@ -1,7 +1,6 @@
 html, body, #root {
-  width: 100vw;
-  height: 100vh;
   margin: 0;
+  min-height: 100vh;
   font-family: Helvetica;
   background-color: rgba(140, 100, 145, 0.025);
 }
@@ -15,8 +14,8 @@ a {
 }
 .content {
   margin: 0.5% auto;
-  margin-left: 0.5%;
-  margin-right: 2%;
+  margin-left: 1.5%;
+  margin-right: auto;
   width: 60%;
   min-width: 900px;
   height: 98%;

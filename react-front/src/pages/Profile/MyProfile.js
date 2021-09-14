@@ -1,14 +1,13 @@
 import React from 'react';
+import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 
-import TextareaAutosize from 'react-textarea-autosize';
 import { Posts } from '../../components/Posts';
+import { InputField } from '../../components/InputField';
 import { ProfileFriendList } from './ProfileFriendList';
 import { SimpleButton } from '../../components/Btns';
 
 import styles from './Profile.module.scss';
-import { InputField } from '../../components/InputField';
-import axios from 'axios';
 
 function MyProfile() {
 
@@ -44,12 +43,14 @@ function MyProfile() {
 		})
 	}
 
-	const handleSubmitStatus = async (value) => {
+	const handleChangeStatus = (text) => {
+		dispatch({ type: "SET_CURRENT_OPENED_PROFILE_DATA_STATUS", payload: text });
+	}
+
+	const handleSubmitStatus = async () => {
 		try {
-			const { data } = await axios.post('/api/profile/uploadProfileStatus', { data: value, token: ACCESS_TOKEN });
-			if (data.status === 200) {
-				dispatch({ type: 'SET_CURRENT_OPENED_PROFILE_DATA', payload: { ...CURRENT_OPENED_PROFILE_DATA, status: value } });
-			} else {
+			const { data } = await axios.post('/api/profile/uploadProfileStatus', { data: CURRENT_OPENED_PROFILE_DATA.status, token: ACCESS_TOKEN });
+			if (!data.status === 200) {
 				dispatch({ type: 'SET_NEW_NOTIFICATION_DATA', payload: { message: 'чет не получилось обновить статус' } });
 			}
 		} catch (error) {
@@ -83,14 +84,16 @@ function MyProfile() {
 
 					<span className={styles.status}>
 						<InputField
-							previousValue={CURRENT_OPENED_PROFILE_DATA.status ? CURRENT_OPENED_PROFILE_DATA.status : ''}
-							placeholder='поставить чёткий статус'
+							value={CURRENT_OPENED_PROFILE_DATA.status && CURRENT_OPENED_PROFILE_DATA.status}
+							dispatchFunction={handleChangeStatus}
 							handleSubmit={handleSubmitStatus}
+							placeholder='поставить чёткий статус'
 							maxValueLength={128}
+							oneRow={true}
 						/>
 					</span>
 
-					<Posts posts={[]} />
+					<Posts />
 				</div>
 			</div>
 		</>

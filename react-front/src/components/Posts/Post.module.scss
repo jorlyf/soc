@@ -1,38 +1,107 @@
 .content {
-    background-color: rgba(0, 100, 255, 0.025);
-    border: 2px solid rgba(0, 0, 0, 0.1);
+    border       : 2px solid rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    height: max-content;
-    width:max-content;
+    height       : max-content;
+    width        : 95%;
+    max-width    : 500px;
+    min-width    : 400px;
+
     .post {
-        width: 100%;
-        height: auto;
-        margin-top: 10px;
-        background-color: brown;
+        display       : flex;
+        flex-direction: column;
+        margin        : 15px 10px;
+        width         : auto;
+        height        : auto;
+
+        padding: 10px;
+
+        background-color: rgb(250, 250, 255);
+        border          : 2px solid rgba(0, 0, 0, 0.05);
+        border-radius   : 5px;
+
+        .text {
+            padding      : 4px;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .images_1 {
+            padding: 10px;
+
+            img {
+                cursor   : pointer;
+                max-width: 100%;
+            }
+        }
+
+        .images_2 {
+            padding              : 10px;
+            display              : grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-auto-rows       : 200px;
+            grid-gap             : 2.5px;
+
+            img {
+                cursor    : pointer;
+                object-fit: cover;
+                height    : 100%;
+                width     : 100%;
+            }
+        }
+
+        .info {
+            display      : flex;
+            border-top   : 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 5px;
+            padding      : 5px;
+            height       : 32px;
+
+            .like {
+                height      : max-content;
+                width       : max-content;
+                justify-self: start;
+            }
+        }
+
+        .comments {
+            background-color: brown;
+            height          : auto;
+        }
     }
+
     .createPost {
         min-width: 350px;
         max-width: 500px;
+
         .input {
-            display: block;
-            overflow: hidden;
-            margin: 10px auto;
-            resize: none;
-            border:0px;
-            outline:0px;
+            display         : block;
+            overflow        : hidden;
+            margin          : 10px auto;
+            resize          : none;
+            border          : 0px;
+            outline         : 0px;
             background-color: transparent;
-            font-size: 14px;
-            padding: 0;
-            width: 80%;
-            min-height: 60px;
+            font-size       : 14px;
+            padding         : 0;
+            width           : 80%;
+            min-height      : 60px;
         }
+
         .buttons {
-            display: flex;
-            height: 40px;
-            align-items: center;
+            display         : flex;
+            height          : 40px;
+            align-items     : center;
+            justify-content : space-between;
+            background-color: rgba(200, 200, 200, 0.05);
+            border          : 1px solid rgba(0, 0, 0, 0.1);
+
             svg {
                 padding-left: 5px;
-                opacity: 85%;
+                opacity     : 85%;
+            }
+
+            button {
+                width : 100px;
+                margin: 0px 15px;
             }
         }
     }

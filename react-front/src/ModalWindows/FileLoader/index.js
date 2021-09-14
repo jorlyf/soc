@@ -5,6 +5,7 @@ import styles from './FileLoader.module.scss';
 
 import { ExitButton } from '../../components/Btns';
 import { LoadedFiles } from './LoadedFiles';
+import { prepareFormData } from "./prepareFormData";
 
 export default function FileLoader({ data }) {
 
@@ -26,11 +27,8 @@ export default function FileLoader({ data }) {
 	}
 
 	const sendFiles = async (files) => {
-		const formData = new FormData();
-		for (const file of files) {
-			formData.append('files', file);
-		};
-		formData.set('token', ACCESS_TOKEN);
+		const before = { files: files };
+		const formData = prepareFormData(before, ACCESS_TOKEN);
 		try {
 			const res = await axios.post(data.apiUrl, formData);
 			if (res.data.status === 200) {
@@ -63,7 +61,11 @@ export default function FileLoader({ data }) {
 	}
 
 	const handleChangeInputFiles = (e) => {
-		dispatch({ type: 'SET_FILE_LOADER_DATA_FILES', payload: [...data.files, ...e.target.files] });
+		if (!data.isMultiple) {
+			dispatch({ type: 'SET_FILE_LOADER_DATA_FILES', payload: [...e.target.files] });
+		} else {
+			dispatch({ type: 'SET_FILE_LOADER_DATA_FILES', payload: [...data.files, ...e.target.files] });
+		}
 	}
 
 	const handleClick = () => {
@@ -102,7 +104,10 @@ export default function FileLoader({ data }) {
 					ref={inputFile}
 				/>
 				<button className={styles.submitButton} onClick={handleSubmit}>грузи</button>
-				<LoadedFiles files={data.files} />
+				<LoadedFiles
+					dispatchType='SET_FILE_LOADER_DATA_FILES'
+					files={data.files}
+				/>
 
 			</div>
 		</div>

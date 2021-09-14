@@ -39,7 +39,7 @@ class Profiles(db.Model):
                               backref='profile',
                               lazy=True,
                               uselist=True)
-    liked_posts = db.relationship('PostLikes',
+    liked_posts = db.relationship('UserPostLikes',
                                   backref='profile',
                                   lazy=True,
                                   uselist=True)
@@ -141,54 +141,71 @@ def getFriendStatus(a_id, b_id):
         return {"status": False}
 
 
-class Posts(db.Model):
-    __tablename__ = 'posts'
+class UserPosts(db.Model):
+    __tablename__ = 'user_posts'
     id = db.Column(db.Integer, primary_key=True)
-    author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    text = db.Column(db.String(4096))
-    images = db.relationship('PostImages',
+    author_id = db.Column(db.Integer, db.ForeignKey('profiles.id'))
+    text = db.Column(db.String(16384))
+    images = db.relationship('UserPostImages',
+                             backref='post',
+                             lazy=True,
+                             uselist=True)
+    likes = db.relationship('UserPostLikes',
+                            backref='post',
+                            lazy=True,
+                            uselist=True)
+    likes_count = db.Column(db.Integer, default=0)
+    comments = db.relationship('UserPostComments',
                                backref='post',
                                lazy=True,
                                uselist=True)
-    likes = db.relationship('PostLikes',
-                            backref='post',
-                            lazy=True,
-                            uselist=True)
-    like_count = db.Column(db.Integer, default=0)
-    comments = db.relationship('PostComments',
-                            backref='post',
-                            lazy=True,
-                            uselist=True)
+    comments_count = db.Column(db.Integer, default=0)
+
+    #serialize before send request
+    def serialize(self):
+        post = {}
+
+        post['author_id'] = self.author_id
+        post['text'] = self.text
+        post['likes_count'] = self.likes_count
+        post['comments_count'] = self.comments_count
+
+        post['image_urls'] = [image.image_url for image in self.images]
+
+        # for image in self.images:
+        #     post['image_urls'].append(image.image_url)
+
+        return post
 
 
-class PostImages(db.Model):
-    __tablename__ = 'post_images'
+class UserPostImages(db.Model):
+    __tablename__ = 'user_post_images'
     id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('user_posts.id'))
     image_url = db.Column(db.String(128))
 
 
-class PostLikes(db.Model):
-    __tablename__ = 'post_likes'
+class UserPostLikes(db.Model):
+    __tablename__ = 'user_post_likes'
     id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('user_posts.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('profiles.id'))
 
 
-class PostComments(db.Model):
-    __tablename__ = 'post_comments'
+class UserPostComments(db.Model):
+    __tablename__ = 'user_post_comments'
     id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.Integer, db.ForeignKey('posts.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('user_posts.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('profiles.id'))
     text = db.Column(db.String(512))
-    images = db.relationship('CommentImages',
-                               backref='comment',
-                               lazy=True,
-                               uselist=True)
+    images = db.relationship('UserCommentImages',
+                             backref='comment',
+                             lazy=True,
+                             uselist=True)
 
 
-class CommentImages(db.Model):
+class UserCommentImages(db.Model):
     __tablename__ = 'comment_images'
     id = db.Column(db.Integer, primary_key=True)
-    comment_id = db.Column(db.Integer, db.ForeignKey('post_comments.id'))
+    comment_id = db.Column(db.Integer, db.ForeignKey('user_post_comments.id'))
     image_url = db.Column(db.String(128))

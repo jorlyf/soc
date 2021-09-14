@@ -71,28 +71,30 @@ export function MenuButton({ menuButtonValue, menuCells = [] }) {
 	)
 }
 
-export function SubmitButton({ value }) {
-	return (
-		<button className={styles.SimpleButton} type='submit'>{value}</button>
-	)
-}
+export function AttachButton({ onChange, filetype, isMultiple = true }) {
 
-export function AttachButton({ onClick }) {
 	const attachFile = React.useRef(null);
 
-	const handleAttachmentButtonClick = () => {
+	const handleClick = () => {
 		attachFile.current.click();
 	}
 
+	const getAcceptedFileTypes = () => {
+		switch (filetype) {
+			case ('image'):
+				return '.png, .jpg, .jpeg'
+		}
+	}
 	return (
 		<>
 			<input className={styles.attachBox}
-				onClick={onClick}
+				onChange={onChange}
 				type='file'
-				accept=".png, .jpg, .jpeg"
+				accept={getAcceptedFileTypes()}
+				multiple={isMultiple}
 				ref={attachFile}
 			/>
-			<svg className={styles.attachSvg} onClick={handleAttachmentButtonClick} alt='attach' viewBox="0 0 280.067 280.067">
+			<svg className={styles.attachSvg} onClick={handleClick} alt='attach' viewBox="0 0 280.067 280.067">
 				<path d="M149.823,257.142c-31.398,30.698-81.882,30.576-113.105-0.429
 		c-31.214-30.987-31.337-81.129-0.42-112.308l-0.026-0.018L149.841,31.615l14.203-14.098c23.522-23.356,61.65-23.356,85.172,0
 		s23.522,61.221,0,84.586l-125.19,123.02l-0.044-0.035c-15.428,14.771-40.018,14.666-55.262-0.394
@@ -102,6 +104,31 @@ export function AttachButton({ onClick }) {
 		c-23.522,23.356-23.522,61.221,0,84.577s61.659,23.356,85.163,0l99.375-98.675l14.194-14.089l14.194,14.089l-14.194,14.098
 		l-99.357,98.675C149.841,257.159,149.823,257.142,149.823,257.142z"/>
 			</svg>
+		</>
+	)
+}
+
+export function LikeButton({ condition, handleClick }) {
+
+	return (
+		<>
+			{condition ?
+				<svg onClick={() => handleClick()} className={styles.LikedButton} version="1.1" viewBox="0 0 426.668 426.668">
+					<path d="M401.788,74.476c-63.492-82.432-188.446-33.792-188.446,49.92
+			c0-83.712-124.962-132.356-188.463-49.92c-65.63,85.222-0.943,234.509,188.459,320.265
+			C402.731,308.985,467.418,159.698,401.788,74.476z"/>
+				</svg>
+
+				:
+
+				<svg onClick={() => handleClick()} className={styles.UnlikedButton} version="1.1" viewBox="0 0 612 612">
+					<path d="M459,18.075c-63.743,0-111.977,37.409-153,76.5c-39.091-41.482-89.256-76.5-153-76.5c-89.773,0-153,77.188-153,161.358
+			c0,45.154,18.494,77.686,38.747,108.228l237.781,285.077c26.699,28.248,31.729,28.248,58.427,0l238.316-285.077
+			C597.082,257.119,612,224.587,612,179.433C612,95.264,548.772,18.075,459,18.075z M535.5,279.744L306,553.575L76.5,278.615
+			c-27.444-38.154-38.25-63.896-38.25-99.182c0-65.752,46.952-124.944,114.75-125.499c55.769-0.459,118.977,56.495,153,99.431
+			c33.125-41.444,97.231-99.431,153-99.431c66,0,114.75,59.747,114.75,125.499C573.75,214.719,565.201,242.373,535.5,279.744z"/>\
+				</svg>
+			}
 		</>
 	)
 }

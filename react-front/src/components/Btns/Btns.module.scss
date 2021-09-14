@@ -146,3 +146,24 @@
     }
   }
 }
+
+.LikedButton {
+  height: 20px;
+  width : 20px;
+  cursor: pointer;
+  fill  : brown;
+
+  &:hover {
+    fill: red;
+  }
+}
+
+.UnlikedButton {
+  height: 20px;
+  width : 20px;
+  cursor: pointer;
+
+  &:hover {
+    fill: red;
+  }
+}
