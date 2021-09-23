@@ -1,11 +1,12 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 
-import styles from './Profile.module.scss';
 import { SimpleButton, HoverButton, MenuButton } from '../../components/Btns';
 import { ProfileFriendList } from './ProfileFriendList';
-import { useSelector } from 'react-redux';
+import { Posts } from '../../components/Posts';
+
+import styles from './Profile.module.scss';
 
 function OtherProfile() {
 
@@ -124,6 +125,7 @@ function OtherProfile() {
 								{CURRENT_OPENED_PROFILE_DATA.login}
 							</p>
 							<p>{CURRENT_OPENED_PROFILE_DATA.status && 'пишет о себе:  ' + CURRENT_OPENED_PROFILE_DATA.status}</p>
+							<Posts userID={CURRENT_OPENED_PROFILE_DATA.id} />
 						</div>
 					</div>
 				</>

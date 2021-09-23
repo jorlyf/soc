@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import styles from './Post.module.scss';
 
 export function Images({ imgArray = [] }) {
-
+  
   const dispatch = useDispatch();
 
   const getUrl = (image) => {
@@ -24,7 +24,6 @@ export function Images({ imgArray = [] }) {
 
   const getClassName = () => {
     switch (imgArray.length) {
-      case 0:
       case 1:
         return styles.images_1;
       default:
@@ -33,6 +32,6 @@ export function Images({ imgArray = [] }) {
   }
 
   return (<div className={getClassName()}>
-    {imgArray.map(image => <img onClick={() => handleClick(image)} src={getUrl(image)} />)}
+    {imgArray.map(image => <img key={image.id} onClick={() => handleClick(image)} src={getUrl(image.url)} />)}
   </div>);
 }

@@ -5,7 +5,7 @@ import { trimString } from '../../utilities/checks';
 import TextareaAutosize from 'react-textarea-autosize';
 import styles from './InputField.module.scss';
 
-export function InputField({ value = "", handleSubmit, dispatchFunction, placeholder, oneRow = false, maxValueLength = 512, minRows = 1 }) {
+export function InputField({ value = "", handleSubmitAfterChange, dispatchFunction, placeholder, oneRow = false, maxValueLength = 512, minRows = 1 }) {
 
   const dispatch = useDispatch();
 
@@ -19,10 +19,11 @@ export function InputField({ value = "", handleSubmit, dispatchFunction, placeho
   }
   const handleUnfocused = () => {
     const newValue = trimString(value);
+    dispatchFunction(newValue);
     if (newValue.length > maxValueLength) {
       dispatch({ type: 'SET_NEW_NOTIFICATION_DATA', payload: { message: 'слишком много написал давай меньше' } });
-    } else if (handleSubmit)
-      handleSubmit();
+    } else if (handleSubmitAfterChange)
+      handleSubmitAfterChange();
   }
 
   return (

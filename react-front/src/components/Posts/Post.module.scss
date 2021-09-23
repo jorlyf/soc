@@ -18,10 +18,15 @@
         background-color: rgb(250, 250, 255);
         border          : 2px solid rgba(0, 0, 0, 0.05);
         border-radius   : 5px;
+        
+        .delete {
+            margin-left: auto;
+        }
 
         .text {
             padding      : 4px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            white-space: pre;
         }
 
         .images_1 {
@@ -50,15 +55,20 @@
 
         .info {
             display      : flex;
+            align-items  : center;
             border-top   : 1px solid rgba(0, 0, 0, 0.05);
             border-radius: 5px;
             padding      : 5px;
             height       : 32px;
 
             .like {
-                height      : max-content;
-                width       : max-content;
-                justify-self: start;
+                display    : flex;
+                align-items: center;
+                height     : max-content;
+
+                span {
+                    padding-left: 2px;
+                }
             }
         }
 

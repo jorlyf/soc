@@ -13,7 +13,7 @@ function Header() {
         <header>
             <div className={styles.logo}>
                 <Link to='/'>
-                    <img src={process.env.PUBLIC_URL + '/icon.jpg'} alt='' />
+                    <img src='/icon.jpg' alt='' />
                     <span>парашыч</span>
                 </Link>
             </div>

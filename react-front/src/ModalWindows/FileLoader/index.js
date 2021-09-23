@@ -43,7 +43,7 @@ export default function FileLoader({ data }) {
 			handleClose();
 		} catch (error) {
 			console.error(error);
-			dispatch({ type: 'SET_NEW_NOTIFICATION_DATA', payload: { message: 'ошибка сервека' } });
+			dispatch({ type: 'SET_NEW_NOTIFICATION_DATA', payload: { message: 'ошибка сервака' } });
 		}
 	}
 

@@ -86,14 +86,14 @@ function MyProfile() {
 						<InputField
 							value={CURRENT_OPENED_PROFILE_DATA.status && CURRENT_OPENED_PROFILE_DATA.status}
 							dispatchFunction={handleChangeStatus}
-							handleSubmit={handleSubmitStatus}
+							handleSubmitAfterChange={handleSubmitStatus}
 							placeholder='поставить чёткий статус'
 							maxValueLength={128}
 							oneRow={true}
 						/>
 					</span>
 
-					<Posts />
+					<Posts userID={CURRENT_OPENED_PROFILE_DATA.id} isMyPosts={true} />
 				</div>
 			</div>
 		</>

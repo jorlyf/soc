@@ -2,7 +2,7 @@ from flask import Blueprint, request
 
 from routes.DbAuth import DbAuth
 from routes.JwtAuth import JwtAuth
-from routes.jwtRequired import tokenRequired
+from routes.authRequired import AuthOptional, AuthRequired
 from routes.DbProfile import DbProfile
 from routes.friendsSystem import FriendSystem
 
@@ -17,28 +17,23 @@ jwtAuth = JwtAuth()
 dbProfile = DbProfile()
 
 
-@profile.route('/api/profile/getProfile/<int:id>', methods=['GET', 'POST'])
-def getProfile(id):
-    user = dbAuth.getUserById(id)
-    req = request.get_json(force=True)
-    token = req.get('token')
+@profile.route('/api/profile/getProfile/<int:profileID>', methods=['GET', 'POST'])
+@AuthOptional()
+def getProfile(requesterID, profileID):
+    user = dbAuth.getUserById(profileID)
 
     if user:
         friends = FriendSystem(user).getSerializedAcceptedFriends()
-        requesterId = 0
         isAccepted = False
-        
-        if token:
-            encoded = tokenRequired(token)
-            if encoded['status'] == True:
-                if not checkIsMyId(encoded['id'], id):
-                    fs = getFriendStatus(encoded['id'], id)
+        if not requesterID:
+            requesterID = 0
 
-                    if fs['status']:
-                        requesterId = fs['requester_id']
-                        isAccepted = fs['is_accepted']
-            else:
-                return {"status": 401}
+        if not checkIsMyId(requesterID, profileID):
+            fs = getFriendStatus(requesterID, profileID)
+
+            if fs['status']:
+                requesterID = fs['requester_id']
+                isAccepted = fs['is_accepted']
         info = {
             "id": user.id,
             "login": user.login,
@@ -47,86 +42,76 @@ def getProfile(id):
             "friends": friends,
             "registerDate": formatTime(user.profile.register_date),
             "lastOnline": user.profile.last_online,
-            "ourFriendship" : {"requesterId": requesterId, "isAccepted": isAccepted}
+            "ourFriendship": {
+                "requesterId": requesterID,
+                "isAccepted": isAccepted
+            }
         }
         return {"status": 200, "info": info}
     return {"status": 404, "info": "user not found"}
 
-@profile.route('/api/profile/addFriend/<int:friendId>', methods=['GET', 'POST'])
-def addFriend(friendId): #updateOnline +
-    req = request.get_json(force=True)
-    token = req.get('token')
-    if token:
-        encoded = tokenRequired(token)
-        if encoded['status']:
-            userId = encoded['id']
-            user = dbAuth.getUserById(userId)
-            friend = dbAuth.getUserById(friendId)
 
-            user.profile.updateLastOnline()
+@profile.route('/api/profile/addFriend/<int:friendID>',
+               methods=['GET', 'POST'])
+@AuthRequired()
+def addFriend(requesterID, friendID):  #updateOnline +
+    user = dbAuth.getUserById(requesterID)
+    friend = dbAuth.getUserById(friendID)
 
-            status = user.profile.addFriendship(friend)
-            return {'status': status}
-        else:
-            return {'status': 401}
-    else:
-        return {'status': 400}
+    user.profile.updateLastOnline()
 
-@profile.route('/api/profile/deleteFriend/<int:friendId>', methods=['GET', 'POST'])
-def deleteFriend(friendId): #updateOnline +
-    req = request.get_json(force=True)
-    token = req.get('token')
-    if token:
-        encoded = tokenRequired(token)
-        if encoded['status']:
-            userId = encoded['id']
-            user = dbAuth.getUserById(userId)
-            friend = dbAuth.getUserById(friendId)
+    status = user.profile.addFriendship(friend)
+    return {'status': status}
 
-            user.profile.updateLastOnline()
 
-            status = user.profile.deleteFriendship(friend)
-            return {'status': status}
-        else:
-            return {'status': 401}
-    else:
-        return {'status': 400}
+@profile.route('/api/profile/deleteFriend/<int:friendID>',
+               methods=['GET', 'POST'])
+@AuthRequired()
+def deleteFriend(requesterID, friendID):  #updateOnline +
+    user = dbAuth.getUserById(requesterID)
+    friend = dbAuth.getUserById(friendID)
 
-@profile.route('/api/profile/getFriends/<int:id>', methods=['GET', 'POST'])
-def getFriends(id):
-    req = request.get_json(force=True)
-    token = req.get('token')
-    user = dbAuth.getUserById(id)
+    user.profile.updateLastOnline()
+
+    status = user.profile.deleteFriendship(friend)
+    return {'status': status}
+
+
+@profile.route('/api/profile/getFriends/<int:profileID>', methods=['GET', 'POST'])
+@AuthOptional()
+def getFriends(requesterID, profileID):
+    user = dbAuth.getUserById(profileID)
     if user:
-        if token:
+        if requesterID: # = authorized user
             #  return other
             pass
-        
+
         acceptedFriends = FriendSystem(user).getSerializedAcceptedFriends()
         return {"status": 200, "acceptedFriends": acceptedFriends}
 
     return {"status": 404}
 
+
 @profile.route('/api/profile/uploadAvatar', methods=['GET', 'POST'])
-def uploadAvatar(): #update online +
-    token = request.form.get('token')
-    
-    encoded = tokenRequired(token)
-    if encoded['status'] == True:
+@AuthRequired(options={"type": "FormData"})
+def uploadAvatar(requesterID):  #update online +
+    user = dbAuth.getUserById(requesterID)
+    if user:
         files = request.files.getlist('files')
         avatar = files[0]
-        dbProfile.updateProfileAvatar(avatar, encoded['id'])
+        dbProfile.updateProfileAvatar(avatar, user)
         return {"status": 200, 'avatarUrl': avatar.filename}
-    return {"status": 401}
+    return {"status": 400}
+
 
 @profile.route('/api/profile/uploadProfileStatus', methods=['GET', 'POST'])
-def uploadProfileStatus(): #update online +
-    req = request.get_json(force=True)
-    token = req.get('token')
-    status = req.get('data')
+@AuthRequired()
+def uploadProfileStatus(requesterID):  #update online +
+    user = dbAuth.getUserById(requesterID)
+    if user:
+        req = request.get_json(force=True)
+        status = req.get('data')
 
-    encoded = tokenRequired(token)
-    if encoded['status'] == True:
-        dbProfile.updateProfileStatus(status, encoded['id'])
+        dbProfile.updateProfileStatus(status, user)
         return {"status": 200}
-    return {"status": 401}
+    return {"status": 400}

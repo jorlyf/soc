@@ -4,12 +4,10 @@ export const prepareFormData = ({ files, text }, ACCESS_TOKEN) => {
     formData.append('files', file);
   };
 
-  if (!text)
-    text = '';
-  if (!ACCESS_TOKEN)
-    ACCESS_TOKEN = '';
+  if (text)
+    formData.set('text', text);
+  if (ACCESS_TOKEN)
+    formData.set('token', ACCESS_TOKEN);
 
-  formData.set('text', text);
-  formData.set('token', ACCESS_TOKEN);
   return formData;
 }

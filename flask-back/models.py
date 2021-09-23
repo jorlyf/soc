@@ -31,10 +31,13 @@ class Users(db.Model):
 
 class Profiles(db.Model):
     __tablename__ = 'profiles'
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    id = db.Column(db.Integer, db.ForeignKey("users.id"), primary_key=True)
     _avatar_url = db.Column(db.String(128))
     status = db.Column(db.String(128))
+    posts = db.relationship('UserPosts',
+                            backref='authorProfile',
+                            uselist=True,
+                            lazy=True)
     friends = db.relationship('Friendships',
                               backref='profile',
                               lazy=True,
@@ -52,7 +55,7 @@ class Profiles(db.Model):
     @property
     def avatar_url(self):
         if self._avatar_url is None:
-            return 'default.jpg'
+            return "default.jpg"
         return self._avatar_url
 
     def addFriendship(self, friend):
@@ -91,8 +94,8 @@ class Profiles(db.Model):
                          Friendships.b_id == self.id))).delete()
             db.session.commit()
             return 200
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
     def updateLastOnline(self):
         self.last_online = getTime()
@@ -165,15 +168,18 @@ class UserPosts(db.Model):
     def serialize(self):
         post = {}
 
+        post['id'] = self.id
         post['author_id'] = self.author_id
         post['text'] = self.text
         post['likes_count'] = self.likes_count
         post['comments_count'] = self.comments_count
 
-        post['image_urls'] = [image.image_url for image in self.images]
-
-        # for image in self.images:
-        #     post['image_urls'].append(image.image_url)
+        post['images'] = []
+        for image in self.images:
+            img = {}
+            img['id'] = image.id
+            img['url'] = image.image_url
+            post['images'].append(img)
 
         return post
 
@@ -198,14 +204,14 @@ class UserPostComments(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('user_posts.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('profiles.id'))
     text = db.Column(db.String(512))
-    images = db.relationship('UserCommentImages',
+    images = db.relationship('UserPostCommentImages',
                              backref='comment',
                              lazy=True,
                              uselist=True)
 
 
-class UserCommentImages(db.Model):
-    __tablename__ = 'comment_images'
+class UserPostCommentImages(db.Model):
+    __tablename__ = 'user_post_comment_images'
     id = db.Column(db.Integer, primary_key=True)
     comment_id = db.Column(db.Integer, db.ForeignKey('user_post_comments.id'))
     image_url = db.Column(db.String(128))

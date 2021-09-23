@@ -1,12 +1,14 @@
 const defaultState = {
   CONTENT_VIEWER_DATA: {},
   FILE_LOADER_DATA: {},
-  NOTIFICATIONS_DATA: []
+  NOTIFICATIONS_DATA: [],
+  CONFIRM_WINDOW_DATA: {}
 };
 
 const SET_CONTENT_VIEWER_DATA = 'SET_CONTENT_VIEWER_DATA';
 const SET_FILE_LOADER_DATA = 'SET_FILE_LOADER_DATA';
 const SET_NOTIFICATIONS_DATA = 'SET_NOTIFICATIONS_DATA';
+const SET_CONFIRM_WINDOW_DATA = 'SET_CONFIRM_WINDOW_DATA';
 
 const SET_FILE_LOADER_DATA_FILES = 'SET_FILE_LOADER_DATA_FILES';
 const SET_NEW_NOTIFICATION_DATA = 'SET_NEW_NOTIFICATION_DATA';
@@ -17,6 +19,8 @@ export function modalWindowsReducer(state = defaultState, action) {
       return { ...state, CONTENT_VIEWER_DATA: { ...action.payload } };
     case SET_FILE_LOADER_DATA:
       return { ...state, FILE_LOADER_DATA: { ...action.payload, files: [] } };
+    case SET_CONFIRM_WINDOW_DATA:
+      return { ...state, CONFIRM_WINDOW_DATA: { ...action.payload } };
     case SET_NOTIFICATIONS_DATA:
       return { ...state, NOTIFICATIONS_DATA: [...action.payload] };
     case SET_NEW_NOTIFICATION_DATA:
